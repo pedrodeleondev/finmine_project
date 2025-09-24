@@ -11,8 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.dappsm.feat_auth.screen.PruebaLogin
+import com.dappsm.feat_splash.screen.SplashDayScreen
 import com.dappsm.finmine_project.ui.theme.Finmine_projectTheme
-import com.dappsm.feat_splash.screen.SplashNightScreen
+import com.dappsm.nav_core.AppScreens
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,24 +25,23 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Finmine_projectTheme {
-                SplashNightScreen()
+                val navController = rememberNavController()
+
+                NavHost(
+                    navController = navController,
+                    startDestination = AppScreens.Splash.route
+                ) {
+                    composable(AppScreens.Splash.route) {
+                        SplashDayScreen(navController)
+                    }
+                    composable(AppScreens.Login.route) {
+                        PruebaLogin(navController)
+                    }
+                    composable(AppScreens.Home.route) {
+                        //HomeScreen()
+                    }
+                }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Finmine_projectTheme {
-        Greeting("Android")
     }
 }
