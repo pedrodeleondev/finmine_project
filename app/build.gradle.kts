@@ -44,6 +44,7 @@ android {
 dependencies {
     implementation(project(":nav_core"))
     implementation(project(":feat_auth"))
+    implementation(project(":ui_core"))
     implementation(project(":feat_splash"))
     implementation(project(":feat_config"))
     implementation(libs.androidx.core.ktx)
