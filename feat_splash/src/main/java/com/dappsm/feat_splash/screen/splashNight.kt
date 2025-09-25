@@ -24,7 +24,7 @@ fun SplashNightScreen(navController: NavController){
     LaunchedEffect(true) {
         delay(3000)
         navController.popBackStack()
-        navController.navigate(AppScreens.Login.route)
+        navController.navigate(AppScreens.authScreen.route)
     }
     Box(
         modifier = Modifier

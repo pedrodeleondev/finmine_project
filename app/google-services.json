@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "682676641193",
+    "project_id": "finmine-b90d3",
+    "storage_bucket": "finmine-b90d3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682676641193:android:7192aa33f1edd74f55f8b8",
+        "android_client_info": {
+          "package_name": "com.dappsm.finmine_project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUYbDIQnxQ74OcAzSrZZ4f5trnodh3Zpw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
