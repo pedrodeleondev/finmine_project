@@ -4,4 +4,4 @@ Integrantes del proyecto:
 - Paola Urdiales
 - Pedro De León
 
-  Proyecto de Desarrollo de Aplicaciones Moviles.
+#Proyecto de Desarrollo de Aplicaciones Moviles.
