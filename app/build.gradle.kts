@@ -48,6 +48,7 @@ dependencies {
     implementation(project(":ui_core"))
     implementation(project(":feat_splash"))
     implementation(project(":feat_config"))
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
