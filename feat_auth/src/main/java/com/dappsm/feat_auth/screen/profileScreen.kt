@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
@@ -20,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,12 +29,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import coil.compose.rememberAsyncImagePainter
 import com.dappsm.feat_auth.viewmodel.AuthState
 import com.dappsm.feat_auth.viewmodel.authviewmodel
 import com.dappsm.ui_core.theme.Poppins
 import com.google.firebase.auth.FirebaseAuth
 import com.dappsm.feat_auth.R
 
+@Composable
+fun ProfileImage() {
+    val currentUser = FirebaseAuth.getInstance().currentUser
+    val photoUrl = currentUser?.photoUrl
+
+    Image(
+        painter = if (photoUrl != null) {
+            rememberAsyncImagePainter(photoUrl)
+        } else {
+            painterResource(R.drawable.profile_picture)
+        },
+        contentDescription = "Profile picture",
+        modifier = Modifier
+            .size(222.dp)
+            .clip(CircleShape)
+    )
+}
 @Composable
 fun ProfileScreen(navController: NavController, authviewmodel: authviewmodel) {
     val authState = authviewmodel.authState.observeAsState()
@@ -66,11 +86,7 @@ fun ProfileScreen(navController: NavController, authviewmodel: authviewmodel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.fillMaxSize()
         ) {
-            Image(
-                painter = painterResource(R.drawable.profile_picture),
-                contentDescription = "Profile picture",
-                modifier = Modifier.size(222.dp)
-            )
+            ProfileImage()
             Text(
                 text = email,
                 fontSize = 25.sp
