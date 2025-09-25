@@ -12,7 +12,20 @@
           "package_name": "com.dappsm.finmine_project"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "682676641193-ebhqe4cgmjpjhrubpl3usk4na888tfqp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dappsm.finmine_project",
+            "certificate_hash": "2e868f623ac5465d8874091f61c2a9e5fd196921"
+          }
+        },
+        {
+          "client_id": "682676641193-fkrd5qf087dcu45eqi304e7085nbcrcc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBUYbDIQnxQ74OcAzSrZZ4f5trnodh3Zpw"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682676641193-fkrd5qf087dcu45eqi304e7085nbcrcc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
