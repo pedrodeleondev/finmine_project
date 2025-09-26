@@ -1,4 +1,6 @@
-package datosFalsos
+package com.dappsm.feat_notas.datosFalsos
+
+import kotlin.collections.get
 
 class ViewModelClass {
     data class Nota(

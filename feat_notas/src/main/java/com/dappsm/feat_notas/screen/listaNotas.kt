@@ -1,4 +1,4 @@
-package screen
+package com.dappsm.feat_notas.screen
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,7 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dappsm.feat_notas.R
-import datosFalsos.ViewModelClass
+import com.dappsm.feat_notas.datosFalsos.ViewModelClass
 
 @Composable
 fun NotasbottomBar() {

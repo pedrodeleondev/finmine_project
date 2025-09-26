@@ -1,4 +1,4 @@
-package screen
+package com.dappsm.feat_notas.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

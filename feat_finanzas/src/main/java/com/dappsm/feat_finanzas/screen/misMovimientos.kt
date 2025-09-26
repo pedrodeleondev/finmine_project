@@ -1,4 +1,4 @@
-package screen
+package com.dappsm.feat_finanzas.screen
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
@@ -55,7 +55,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dappsm.feat_finanzas.R
-import datosFalsos.ViewModelClass
+import com.dappsm.feat_finanzas.datosFalsos.ViewModelClass
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

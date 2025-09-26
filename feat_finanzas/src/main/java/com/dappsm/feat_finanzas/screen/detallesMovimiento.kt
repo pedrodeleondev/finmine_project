@@ -1,4 +1,4 @@
-package screen
+package com.dappsm.feat_finanzas.screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,7 +40,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import datosFalsos.ViewModelClass
+import com.dappsm.feat_finanzas.datosFalsos.ViewModelClass
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,6 @@
-package datosFalsos
+package com.dappsm.feat_finanzas.datosFalsos
+
+import kotlin.collections.get
 
 class ViewModelClass {
     data class Movimiento(
