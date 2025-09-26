@@ -10,6 +10,8 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import com.dappsm.ui_core.theme.AppTypographyPoppins
+
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -52,7 +54,7 @@ fun Finmine_projectTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = AppTypographyPoppins,
         content = content
     )
 }

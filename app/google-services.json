@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "682676641193",
+    "project_id": "finmine-b90d3",
+    "storage_bucket": "finmine-b90d3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682676641193:android:7192aa33f1edd74f55f8b8",
+        "android_client_info": {
+          "package_name": "com.dappsm.finmine_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "682676641193-ebhqe4cgmjpjhrubpl3usk4na888tfqp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dappsm.finmine_project",
+            "certificate_hash": "2e868f623ac5465d8874091f61c2a9e5fd196921"
+          }
+        },
+        {
+          "client_id": "682676641193-0vgc3hean7oani236eumbqqjfk8a4aln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUYbDIQnxQ74OcAzSrZZ4f5trnodh3Zpw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "682676641193-0vgc3hean7oani236eumbqqjfk8a4aln.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

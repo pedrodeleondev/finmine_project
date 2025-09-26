@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.fragment.app.Fragment
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,10 +19,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.dappsm.feat_auth.screen.PruebaLogin
+import com.dappsm.feat_auth.navigation.AppNavigationLS
+import com.dappsm.feat_auth.viewmodel.authviewmodel
 import com.dappsm.feat_config.isdarkmode.AppDatabase
 import com.dappsm.feat_config.isdarkmode.SettingsRepository
 import com.dappsm.feat_splash.screen.SplashDayScreen
@@ -46,6 +49,7 @@ class MainActivity : ComponentActivity() {
 }
 @Composable
 fun FuncionamientoApp(){
+    val authviewmodel : authviewmodel= viewModel()
     val navController = rememberNavController()
     val context = LocalContext.current
 
@@ -76,11 +80,8 @@ fun FuncionamientoApp(){
                 SplashDayScreen(navController)
             }
         }
-        composable(AppScreens.Login.route) {
-            PruebaLogin(navController)
-        }
-        composable(AppScreens.Home.route) {
-            // HomeScreen()
+        composable(AppScreens.authScreen.route) {
+            AppNavigationLS(authviewmodel)
         }
     }
 }
