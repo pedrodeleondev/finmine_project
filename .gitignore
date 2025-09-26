@@ -1,15 +1,66 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+# Archivos y carpetas de Gradle
+.gradle/
+build/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Configuración local (no debe compartirse)
 local.properties
+
+# Configuración de Android Studio / IntelliJ
+.idea/
+.idea/caches
+.idea/libraries
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+*.iml
+*.ipr
+*.iws
+out/
+
+# Cachés de Jetpack Compose y Kotlin
+**/compose-cache/
+**/.compose-cache/
+**/.kotlin/
+
+# Archivos de registro
+*.log
+
+# Archivos de claves (no deben estar en el repo)
+*.jks
+*.keystore
+
+# Archivos generados por el sistema operativo
+.DS_Store
+Thumbs.db
+
+# Archivos compilados de Kotlin/Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Archivos de aplicación Android
+*.apk
+*.ap_
+*.aab
+
+# Archivos generados por NDK
+obj/
+*.so
+
+# Archivos de Crashlytics / Firebase
+fabric.properties
+crashlytics-build.properties
+
+# Carpeta de capturas de pantalla de Android Studio
+captures/
+
+# Compilaciones nativas externas
+.externalNativeBuild/
+.cxx/
+
+# Ignorar README
+README.md
