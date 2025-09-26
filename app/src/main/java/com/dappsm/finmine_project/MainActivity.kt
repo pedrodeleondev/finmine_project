@@ -31,6 +31,7 @@ import com.dappsm.feat_splash.screen.SplashDayScreen
 import com.dappsm.finmine_project.ui.theme.Finmine_projectTheme
 import com.dappsm.feat_splash.screen.SplashNightScreen
 import com.dappsm.nav_core.AppScreens
+import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,6 +43,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Finmine_projectTheme {
                 FuncionamientoApp()
+                FirebaseApp.initializeApp(this)
             }
 
         }
