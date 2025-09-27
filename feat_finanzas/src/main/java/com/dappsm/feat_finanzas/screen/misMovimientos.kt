@@ -4,15 +4,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,25 +12,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -51,30 +26,34 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dappsm.data_core.model.Movimiento
 import com.dappsm.feat_finanzas.R
-import com.dappsm.feat_finanzas.datosFalsos.ViewModelClass
+import com.dappsm.feat_finanzas.viewmodel.MovimientoUiViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MisMovimientosCard() {
-    var movimientos by remember {
-        mutableStateOf(ViewModelClass.movimientosRepo.obtenerMovimientos())
-    }
+fun MisMovimientosCard(
+    viewModel: MovimientoUiViewModel = viewModel(),
+    onAddClick: () -> Unit = {},
+    onEditClick: (Movimiento) -> Unit = {},
+    onDetailsClick: (Movimiento) -> Unit = {}
+) {
+    val movimientos by viewModel.movimientos.collectAsState()
 
     Scaffold(
         topBar = { MisMovimientosTopBar() },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {}, // TODO: lógica al click
+                onClick = onAddClick,
                 containerColor = MaterialTheme.colorScheme.tertiary,
                 elevation = FloatingActionButtonDefaults.elevation(0.dp)
             ) {
                 Icon(
                     Icons.Default.Add,
-                    contentDescription = "AgregarNota",
+                    contentDescription = "AgregarMovimiento",
                     tint = MaterialTheme.colorScheme.onPrimary,
                     modifier = Modifier.size(46.dp)
                 )
@@ -82,18 +61,23 @@ fun MisMovimientosCard() {
         },
         bottomBar = { MisMovimientosBottomBar() }
     ) { innerPadding ->
-
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
             items(movimientos, key = { it.id }) { movimiento ->
-                MovimientoCard(movimiento = movimiento)
+                MovimientoCard(
+                    movimiento = movimiento,
+                    onDelete = { viewModel.eliminar(movimiento) },
+                    onEditClick = { onEditClick(movimiento) },
+                    onDetailsClick = { onDetailsClick(movimiento) }
+                )
             }
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MisMovimientosTopBar() {
@@ -110,8 +94,14 @@ fun MisMovimientosTopBar() {
         }
     )
 }
+
 @Composable
-fun MovimientoCard(movimiento: ViewModelClass.Movimiento) {
+fun MovimientoCard(
+    movimiento: Movimiento,
+    onDelete: () -> Unit,
+    onEditClick: () -> Unit,
+    onDetailsClick: () -> Unit
+) {
     var estadoExpan by remember { mutableStateOf(false) }
     val rotacion by animateFloatAsState(targetValue = if (estadoExpan) 180f else 0f)
 
@@ -126,7 +116,8 @@ fun MovimientoCard(movimiento: ViewModelClass.Movimiento) {
                 )
             ),
         colors = CardDefaults.cardColors(
-            containerColor = if (movimiento.tipo == "Ingreso") { MaterialTheme.colorScheme.onErrorContainer
+            containerColor = if (movimiento.tipo.lowercase() == "ingreso") {
+                MaterialTheme.colorScheme.onErrorContainer
             } else {
                 MaterialTheme.colorScheme.error
             }
@@ -139,10 +130,11 @@ fun MovimientoCard(movimiento: ViewModelClass.Movimiento) {
                 .fillMaxWidth()
                 .padding(2.dp)
         ) {
-            // Header con fecha y flecha
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val textFechaHora = buildAnnotatedString {
-                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimaryContainer)) { append(" ${movimiento.fechayhora}") }
+                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimaryContainer)) {
+                        append(" ${movimiento.fecha}")
+                    }
                 }
                 Text(
                     modifier = Modifier
@@ -171,7 +163,6 @@ fun MovimientoCard(movimiento: ViewModelClass.Movimiento) {
                 }
             }
 
-            // Contenido expandido
             if (estadoExpan) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
@@ -184,45 +175,44 @@ fun MovimientoCard(movimiento: ViewModelClass.Movimiento) {
                         modifier = Modifier.weight(1f)
                     ) {
                         val textTipo = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Medium)) { append("Tipo:") }
-                            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Light)) { append(" ${movimiento.tipo}") }
+                            withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Medium)) { append("Tipo:") }
+                            withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Light)) { append(" ${movimiento.tipo}") }
                         }
                         Text(text = textTipo, fontSize = 20.sp, modifier = Modifier.padding(4.dp))
 
                         val textMonto = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Medium)) { append("Monto:") }
-                            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Light)) { append(" ${movimiento.monto}") }
+                            withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Medium)) { append("Monto:") }
+                            withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Light)) { append(" ${movimiento.cantidad}") }
                         }
                         Text(text = textMonto, fontSize = 20.sp, modifier = Modifier.padding(4.dp))
 
                         val textMotivo = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Medium)) { append("Motivo:") }
-                            withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Light)) { append(" ${movimiento.motivo}") }
+                            withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Medium)) { append("Motivo:") }
+                            withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimary, fontWeight = FontWeight.Light)) { append(" ${movimiento.motivo ?: ""}") }
                         }
                         Text(text = textMotivo, fontSize = 20.sp, modifier = Modifier.padding(4.dp))
                     }
-
 
                     Column(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.End
                     ) {
-                        IconButton(onClick = { /* acción editar/mover */ }) {
+                        IconButton(onClick = onDetailsClick) {
                             Icon(
                                 painter = painterResource(id = R.drawable.vermas),
-                                contentDescription = "Editar",
+                                contentDescription = "Detalles",
                                 modifier = Modifier.size(24.dp)
                             )
                         }
-                        IconButton(onClick = { /* acción eliminar */ }) {
+                        IconButton(onClick = onDelete) {
                             Icon(
                                 Icons.Default.Delete,
                                 contentDescription = "Eliminar",
                                 modifier = Modifier.size(24.dp)
                             )
-                        } }
+                        }
+                    }
                 }
-
             }
         }
     }
@@ -298,17 +288,3 @@ fun MisMovimientosBottomBar() {
         )
     }
 }
-
-
-@Preview(showBackground = true)
-@Composable
-fun misMovimientos() {
-    /*FinmineTheme {
-        MisMovimientosCard()
-    }*/
-}
-
-
-
-
-

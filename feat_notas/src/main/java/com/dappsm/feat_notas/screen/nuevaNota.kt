@@ -1,43 +1,21 @@
 package com.dappsm.feat_notas.screen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.dappsm.feat_notas.viewmodel.NotaUiViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,7 +24,10 @@ fun topBarNuevaNota(onBackClick: () -> Unit) {
         title = {
             Text(
                 text = "Nueva Nota",
-                modifier= Modifier.fillMaxWidth().fillMaxHeight().padding(top= 8.dp, end = 3.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .padding(top = 8.dp, end = 3.dp),
                 textAlign = TextAlign.Right,
                 style = TextStyle(
                     fontSize = 30.sp,
@@ -60,73 +41,53 @@ fun topBarNuevaNota(onBackClick: () -> Unit) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = "Regresar",
-                    modifier= Modifier.size(30.dp),
+                    modifier = Modifier.size(30.dp),
                 )
             }
         }
     )
 }
+
 @Composable
-fun formNuevaNota(onBackClick: () -> Unit,
-                  onEditClick: () -> Unit){
-    var fecha by remember{ mutableStateOf("") }
-    var comentario by remember {mutableStateOf("")}
+fun formNuevaNota(
+    onBackClick: () -> Unit,
+    viewModel: NotaUiViewModel = viewModel()
+) {
+    var comentario by remember { mutableStateOf("") }
 
-    Column(modifier= Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.Top){
-        Spacer(modifier= Modifier.height(10.dp))
-        topBarNuevaNota (onBackClick)
-        Spacer(modifier= Modifier.height(100.dp))
-        Text(text= "Fecha:",
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background),
+        verticalArrangement = Arrangement.Top
+    ) {
+        Spacer(modifier = Modifier.height(10.dp))
+        topBarNuevaNota(onBackClick)
+        Spacer(modifier = Modifier.height(100.dp))
+
+        Text(
+            text = "Comentario:",
             fontSize = 20.sp,
             fontWeight = FontWeight.Light,
-            color= MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier.fillMaxWidth().padding(start=15.dp),
+            color = MaterialTheme.colorScheme.primaryContainer,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 15.dp),
         )
 
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().padding(start=15.dp ,end= 15.dp),
-            shape= RoundedCornerShape(10.dp),
-            value =fecha,
-            onValueChange = { fecha = it },
-
-            placeholder = {
-                Text(
-                    "ej. \"20/10/2025\"",
-                    color =MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light,
-                )
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                cursorColor = MaterialTheme.colorScheme.background,
-                focusedTextColor = MaterialTheme.colorScheme.background,
-                unfocusedTextColor = MaterialTheme.colorScheme.background
-            )
-        )
-        Spacer(modifier= Modifier.height(15.dp))
-        Text(text= "Comentario:",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Light,
-            color= MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier.fillMaxWidth().padding(start=15.dp),
-        )
-
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().padding(start=15.dp ,end= 15.dp),
-            shape= RoundedCornerShape(10.dp),
-            maxLines=3,
-            value =comentario,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 15.dp, end = 15.dp),
+            shape = RoundedCornerShape(10.dp),
+            maxLines = 3,
+            value = comentario,
             onValueChange = { comentario = it },
-
             placeholder = {
                 Text(
                     "ej. \"Pagar mensualidad\"",
-                    color =MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light,
+                    color = MaterialTheme.colorScheme.background,
+                    fontWeight = FontWeight.Light,
                 )
             },
             colors = OutlinedTextFieldDefaults.colors(
@@ -139,35 +100,35 @@ fun formNuevaNota(onBackClick: () -> Unit,
                 unfocusedTextColor = MaterialTheme.colorScheme.background
             )
         )
-        Spacer(modifier= Modifier.height(70.dp))
-        Box( modifier = Modifier
-            .fillMaxWidth(),
-            contentAlignment = Alignment.Center){
-            Button(
-                onClick = { onEditClick() },
-                modifier = Modifier.width(300.dp).height(74.dp).padding(vertical = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
-                shape = RoundedCornerShape(10.dp)){
 
+        Spacer(modifier = Modifier.height(70.dp))
+
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Button(
+                onClick = {
+                    if (comentario.isNotBlank()) {
+                        viewModel.agregar(usuarioId = 1, contenido = comentario)
+                        onBackClick()
+                    }
+                },
+                modifier = Modifier
+                    .width(300.dp)
+                    .height(74.dp)
+                    .padding(vertical = 16.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
+                shape = RoundedCornerShape(10.dp)
+            ) {
                 Text(
-                    modifier= Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     textAlign = TextAlign.Center,
-                    text= "Agregar nota",
+                    text = "Agregar nota",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold
                 )
-
             }
         }
-
     }
-
-}
-@Preview(showBackground = true)
-@Composable
-fun formmNotas() {
-   /* FinmineProyectTheme{
-        formNuevaNota (onBackClick = { *//*hola*//* },
-            onEditClick = { *//* lógica editar *//* })
-    }*/
 }

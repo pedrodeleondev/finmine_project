@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.dappsm.data_core.database.AppDatabaseInstance
 import com.dappsm.feat_auth.navigation.AppNavigationLS
 import com.dappsm.feat_auth.viewmodel.authviewmodel
 import com.dappsm.feat_config.isdarkmode.AppDatabase
@@ -31,6 +32,7 @@ import com.dappsm.feat_splash.screen.SplashDayScreen
 import com.dappsm.finmine_project.ui.theme.Finmine_projectTheme
 import com.dappsm.feat_splash.screen.SplashNightScreen
 import com.dappsm.nav_core.AppScreens
+import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -41,6 +43,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Finmine_projectTheme {
+                AppDatabaseInstance.init(this)
+
                 FuncionamientoApp()
             }
 
