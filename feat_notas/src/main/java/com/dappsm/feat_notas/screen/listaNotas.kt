@@ -119,7 +119,7 @@ fun NotaCard(nota: Nota) {
         Spacer(modifier = Modifier.size(20.dp))
         Divider(
             modifier = Modifier
-                .width(600.dp)
+                .fillMaxWidth()
                 .height(1.dp),
             color = MaterialTheme.colorScheme.primary
         )
