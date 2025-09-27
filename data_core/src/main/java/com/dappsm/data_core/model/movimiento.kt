@@ -10,6 +10,7 @@ import java.util.UUID
 data class Movimiento(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val usuarioId: Int,
+    val usuarioEmail: String, // 👈 NUEVO CAMPO
     val tipo: String,
     val cantidad: String,
     val fecha: LocalDateTime,
@@ -25,6 +26,7 @@ data class Movimiento(
         return mapOf(
             "id" to id,
             "usuarioId" to usuarioId,
+            "usuarioEmail" to usuarioEmail,
             "tipo" to tipo,
             "cantidad" to cantidad,
             "fecha" to fecha.format(f),
@@ -35,12 +37,14 @@ data class Movimiento(
             "isDeleted" to isDeleted
         )
     }
+
     companion object {
         fun fromMap(map: Map<String, Any?>): Movimiento {
             val f = DateTimeFormatter.ISO_LOCAL_DATE_TIME
             return Movimiento(
                 id = map["id"] as String,
                 usuarioId = (map["usuarioId"] as Number).toInt(),
+                usuarioEmail = map["usuarioEmail"] as String,
                 tipo = map["tipo"] as String,
                 cantidad = map["cantidad"].toString(),
                 fecha = LocalDateTime.parse(map["fecha"] as String, f),

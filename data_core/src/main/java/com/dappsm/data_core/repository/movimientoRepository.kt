@@ -16,7 +16,8 @@ class MovimientoRepository(
     private val dao: MovimientoDao,
     private val firebaseService: FirebaseMovimientoService
 ) {
-    fun getAllMovimientos(): Flow<List<Movimiento>> = dao.getAllMovimientos()
+    fun getMovimientosByEmail(email: String): Flow<List<Movimiento>> =
+        dao.getMovimientosByEmail(email)
 
     suspend fun getMovimientoById(id: String): Movimiento? = dao.getMovimientoById(id)
 
@@ -49,8 +50,13 @@ class MovimientoRepository(
     suspend fun clearPending(id: String) = dao.clearPending(id)
 
     private fun enqueueOneTime(context: Context) {
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).setRequiresBatteryNotLow(true).build()
-        val req: WorkRequest = OneTimeWorkRequestBuilder<SyncMovimientosWorker>().setConstraints(constraints).build()
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+        val req: WorkRequest = OneTimeWorkRequestBuilder<SyncMovimientosWorker>()
+            .setConstraints(constraints)
+            .build()
         WorkManager.getInstance(context).enqueue(req)
     }
 }
