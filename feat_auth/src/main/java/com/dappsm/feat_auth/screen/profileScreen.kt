@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -15,22 +14,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.dappsm.feat_auth.viewmodel.AuthState
 import com.dappsm.feat_auth.viewmodel.authviewmodel
 import com.dappsm.ui_core.theme.Poppins
 import com.google.firebase.auth.FirebaseAuth
@@ -53,25 +46,19 @@ fun ProfileImage() {
             .clip(CircleShape)
     )
 }
+
 @Composable
-fun ProfileScreen(navController: NavController, authviewmodel: authviewmodel) {
-    val authState = authviewmodel.authState.observeAsState()
+fun ProfileScreen(
+    authViewModel: authviewmodel,
+    onLogout: () -> Unit
+) {
     val currentUser = FirebaseAuth.getInstance().currentUser
     val email = currentUser?.email ?: "Correo no disponible"
-    LaunchedEffect(authState.value) {
-        when (authState.value) {
 
-            is AuthState.Unauthenticated -> {
-                navController.navigate("login")
-            }
-
-            else -> Unit
-        }
-    }
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        Column() {
+        Column {
             Text(
                 text = "Mi perfil",
                 fontSize = 29.sp,
@@ -79,8 +66,8 @@ fun ProfileScreen(navController: NavController, authviewmodel: authviewmodel) {
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 20.dp, start = 15.dp)
             )
-
         }
+
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -92,6 +79,7 @@ fun ProfileScreen(navController: NavController, authviewmodel: authviewmodel) {
                 fontSize = 25.sp
             )
         }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -100,7 +88,7 @@ fun ProfileScreen(navController: NavController, authviewmodel: authviewmodel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedButton(
-                onClick = { authviewmodel.signout() },
+                onClick = { onLogout() },
                 modifier = Modifier
                     .width(356.dp)
                     .padding(horizontal = 16.dp),
