@@ -65,11 +65,20 @@ fun formMovimiento(
     onBackClick: () -> Unit,
     viewModel: MovimientoUiViewModel = viewModel()
 ) {
-    var tipo by remember { mutableStateOf(movimientoExistente?.tipo ?: "") }
-    var monto by remember { mutableStateOf(movimientoExistente?.cantidad ?: "") }
-    var metodopago by remember { mutableStateOf(movimientoExistente?.metodoPago ?: "") }
-    var motivo by remember { mutableStateOf(movimientoExistente?.motivo ?: "") }
+    var tipo by remember { mutableStateOf("") }
+    var monto by remember { mutableStateOf("") }
+    var metodopago by remember { mutableStateOf("") }
+    var motivo by remember { mutableStateOf("") }
     val esEdicion = movimientoExistente != null
+
+    LaunchedEffect(movimientoExistente) {
+        if (movimientoExistente != null) {
+            tipo = movimientoExistente.tipo
+            monto = movimientoExistente.cantidad
+            metodopago = movimientoExistente.metodoPago
+            motivo = movimientoExistente.motivo ?: ""
+        }
+    }
 
     Scaffold(
         topBar = { topBarCMovements(esEdicion = esEdicion, onBackClick = onBackClick) },
