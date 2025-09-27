@@ -58,8 +58,7 @@ fun MisMovimientosCard(
                     modifier = Modifier.size(46.dp)
                 )
             }
-        },
-        bottomBar = { MisMovimientosBottomBar() }
+        }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -218,73 +217,3 @@ fun MovimientoCard(
     }
 }
 
-@Composable
-fun MisMovimientosBottomBar() {
-    NavigationBar(
-        containerColor = MaterialTheme.colorScheme.primaryContainer
-    ) {
-        NavigationBarItem(
-            selected = true,
-            onClick = { },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.billos),
-                    contentDescription = "Movimientos",
-                    modifier = Modifier.size(30.dp),
-                    tint = Color.Unspecified
-                )
-            },
-            colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Color.Transparent
-            )
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.filterlist),
-                    contentDescription = "Lista filtrada",
-                    modifier = Modifier.size(30.dp),
-                    tint = Color.Unspecified
-                )
-            }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.notsrecientes),
-                    contentDescription = "Notas recientes",
-                    modifier = Modifier.size(30.dp),
-                    tint = Color.Unspecified
-                )
-            }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.cuentausuario),
-                    contentDescription = "Cuenta",
-                    modifier = Modifier.size(30.dp),
-                    tint = Color.Unspecified
-                )
-            }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.sittings),
-                    contentDescription = "Configuración",
-                    modifier = Modifier.size(30.dp),
-                    tint = Color.Unspecified
-                )
-            }
-        )
-    }
-}

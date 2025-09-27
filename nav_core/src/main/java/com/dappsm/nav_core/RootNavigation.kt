@@ -49,12 +49,14 @@ fun RootNavigation(authViewModel: authviewmodel) {
                     launchSingleTop = true
                 }
             }
+
             is AuthState.Unauthenticated -> {
                 navController.navigate("login") {
                     popUpTo("main") { inclusive = true }
                     launchSingleTop = true
                 }
             }
+
             else -> Unit
         }
     }
@@ -94,18 +96,25 @@ fun MainScaffold(rootNavController: NavHostController, authViewModel: authviewmo
                     viewModel = vm,
                     onAddClick = { innerNavController.navigate(Screens.formMovimientoScreen.name) },
                     onEditClick = { movimiento ->
-                        innerNavController.currentBackStackEntry?.savedStateHandle?.set("movimiento", movimiento)
+                        innerNavController.currentBackStackEntry?.savedStateHandle?.set(
+                            "movimiento",
+                            movimiento
+                        )
                         innerNavController.navigate(Screens.formMovimientoScreen.name)
                     },
                     onDetailsClick = { movimiento ->
-                        innerNavController.currentBackStackEntry?.savedStateHandle?.set("movimiento", movimiento)
+                        innerNavController.currentBackStackEntry?.savedStateHandle?.set(
+                            "movimiento",
+                            movimiento
+                        )
                         innerNavController.navigate(Screens.detalleMovimientoScreen.name)
                     }
                 )
             }
             composable(Screens.formMovimientoScreen.name) {
                 val vm: MovimientoUiViewModel = viewModel()
-                val movimiento = innerNavController.previousBackStackEntry?.savedStateHandle?.get<Movimiento>("movimiento")
+                val movimiento =
+                    innerNavController.previousBackStackEntry?.savedStateHandle?.get<Movimiento>("movimiento")
                 formMovimiento(
                     movimientoExistente = movimiento,
                     onBackClick = { innerNavController.popBackStack() },
@@ -113,13 +122,17 @@ fun MainScaffold(rootNavController: NavHostController, authViewModel: authviewmo
                 )
             }
             composable(Screens.detalleMovimientoScreen.name) {
-                val movimiento = innerNavController.previousBackStackEntry?.savedStateHandle?.get<Movimiento>("movimiento")
+                val movimiento =
+                    innerNavController.previousBackStackEntry?.savedStateHandle?.get<Movimiento>("movimiento")
                 if (movimiento != null) {
                     DetallesMovimiento(
                         movimiento = movimiento,
                         onBackClick = { innerNavController.popBackStack() },
                         onEditClick = {
-                            innerNavController.currentBackStackEntry?.savedStateHandle?.set("movimiento", movimiento)
+                            innerNavController.currentBackStackEntry?.savedStateHandle?.set(
+                                "movimiento",
+                                movimiento
+                            )
                             innerNavController.navigate(Screens.formMovimientoScreen.name)
                         }
                     )
@@ -169,7 +182,7 @@ fun BottomNavBar(navController: NavHostController) {
                         contentDescription = item.label
                     )
                 },
-                label = { Text(item.label) }
+                label = null
             )
         }
     }
