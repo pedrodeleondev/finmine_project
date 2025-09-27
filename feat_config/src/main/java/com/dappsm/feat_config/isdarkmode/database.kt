@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [SettingsEntity::class], version = 1)
+@Database(entities = [SettingsEntity::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun settingsDao(): SettingsDao
 
@@ -18,8 +18,10 @@ abstract class AppDatabase : RoomDatabase() {
                 Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    "finmine_db"
-                ).build().also { INSTANCE = it }
+                    "config_db"
+                )
+                    .build()
+                    .also { INSTANCE = it }
             }
         }
     }

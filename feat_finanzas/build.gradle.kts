@@ -38,6 +38,7 @@ android {
 
 dependencies {
     implementation(project(":data_core"))
+    implementation(project(":feat_config"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
