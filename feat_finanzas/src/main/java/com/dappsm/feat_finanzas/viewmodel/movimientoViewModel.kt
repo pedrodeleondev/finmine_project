@@ -18,13 +18,12 @@ class MovimientoUiViewModel(app: Application) : AndroidViewModel(app) {
     val movimientos = repo.getAllMovimientos().stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
     fun agregar(usuarioId: Int, tipo: String, cantidadStr: String, metodoPago: String, motivo: String?) {
-        val cant = cantidadStr.toDoubleOrNull() ?: 0.0
         val now = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
         val m = Movimiento(
             usuarioId = usuarioId,
             tipo = tipo,
-            cantidad = cant,
+            cantidad = cantidadStr,
             fecha = now,
             mes = now.monthValue,
             hora = now.format(formatter),

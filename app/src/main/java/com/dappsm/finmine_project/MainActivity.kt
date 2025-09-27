@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.dappsm.data_core.database.AppDatabaseInstance
 import com.dappsm.feat_auth.navigation.AppNavigationLS
 import com.dappsm.feat_auth.viewmodel.authviewmodel
 import com.dappsm.feat_config.isdarkmode.AppDatabase
@@ -42,8 +43,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Finmine_projectTheme {
+                AppDatabaseInstance.init(this)
+
                 FuncionamientoApp()
-                FirebaseApp.initializeApp(this)
             }
 
         }
