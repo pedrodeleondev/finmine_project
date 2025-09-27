@@ -59,16 +59,11 @@ fun RootNavigation(authViewModel: authviewmodel) {
         }
     }
 
-    NavHost(
-        navController = navController,
-        startDestination = "splash"
-    ) {
+    NavHost(navController = navController, startDestination = "splash") {
         composable("splash") {
-            SplashDayScreen(navController)
+            SplashDayScreen()
             LaunchedEffect(Unit) {
                 delay(1500)
-                if (authState.value !is AuthState.Authenticated && authState.value !is AuthState.Unauthenticated) {
-                }
             }
         }
         composable("login") {
@@ -78,24 +73,16 @@ fun RootNavigation(authViewModel: authviewmodel) {
             RegisterScreen(navController, authViewModel)
         }
         composable("main") {
-            MainScaffold(
-                rootNavController = navController,
-                authViewModel = authViewModel
-            )
+            MainScaffold(rootNavController = navController, authViewModel = authViewModel)
         }
     }
 }
 
 @Composable
-fun MainScaffold(
-    rootNavController: NavHostController,
-    authViewModel: authviewmodel
-) {
+fun MainScaffold(rootNavController: NavHostController, authViewModel: authviewmodel) {
     val innerNavController = rememberNavController()
 
-    Scaffold(
-        bottomBar = { BottomNavBar(navController = innerNavController) }
-    ) { innerPadding: PaddingValues ->
+    Scaffold(bottomBar = { BottomNavBar(navController = innerNavController) }) { innerPadding: PaddingValues ->
         NavHost(
             navController = innerNavController,
             startDestination = Screens.movimientosScreen.name,
@@ -118,8 +105,7 @@ fun MainScaffold(
             }
             composable(Screens.formMovimientoScreen.name) {
                 val vm: MovimientoUiViewModel = viewModel()
-                val movimiento = innerNavController.previousBackStackEntry
-                    ?.savedStateHandle?.get<Movimiento>("movimiento")
+                val movimiento = innerNavController.previousBackStackEntry?.savedStateHandle?.get<Movimiento>("movimiento")
                 formMovimiento(
                     movimientoExistente = movimiento,
                     onBackClick = { innerNavController.popBackStack() },
@@ -127,8 +113,7 @@ fun MainScaffold(
                 )
             }
             composable(Screens.detalleMovimientoScreen.name) {
-                val movimiento = innerNavController.previousBackStackEntry
-                    ?.savedStateHandle?.get<Movimiento>("movimiento")
+                val movimiento = innerNavController.previousBackStackEntry?.savedStateHandle?.get<Movimiento>("movimiento")
                 if (movimiento != null) {
                     DetallesMovimiento(
                         movimiento = movimiento,
@@ -149,23 +134,16 @@ fun MainScaffold(
             }
             composable(Screens.formNotaScreen.name) {
                 val vm: NotaUiViewModel = viewModel()
-                formNuevaNota(
-                    viewModel = vm,
-                    onBackClick = { innerNavController.popBackStack() }
-                )
+                formNuevaNota(viewModel = vm, onBackClick = { innerNavController.popBackStack() })
             }
             composable(Screens.perfilScreen.name) {
                 ProfileScreen(
                     authViewModel = authViewModel,
-                    onLogout = {
-                        authViewModel.signout()
-                    }
+                    onLogout = { authViewModel.signout() }
                 )
             }
-            composable(Screens.mensualesScreen.name) {
-            }
-            composable(Screens.configScreen.name) {
-            }
+            composable(Screens.mensualesScreen.name) { }
+            composable(Screens.configScreen.name) { }
         }
     }
 }
