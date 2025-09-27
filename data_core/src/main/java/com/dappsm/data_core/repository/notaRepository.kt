@@ -16,7 +16,7 @@ class NotaRepository(
     private val dao: NotaDao,
     private val firebaseService: FirebaseNotaService
 ) {
-    fun getAllNotas(): Flow<List<Nota>> = dao.getAllNotas()
+    fun getNotasByEmail(email: String): Flow<List<Nota>> = dao.getNotasByEmail(email)
 
     suspend fun getNotaById(id: String): Nota? = dao.getNotaById(id)
 

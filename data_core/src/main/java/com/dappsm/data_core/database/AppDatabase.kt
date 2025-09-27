@@ -10,7 +10,7 @@ import com.dappsm.data_core.model.Nota
 
 @Database(
     entities = [Movimiento::class, Nota::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

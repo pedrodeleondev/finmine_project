@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NotaDao {
-    @Query("SELECT * FROM notas WHERE isDeleted = 0 ORDER BY fecha DESC")
-    fun getAllNotas(): Flow<List<Nota>>
+    @Query("SELECT * FROM notas WHERE isDeleted = 0 AND usuarioEmail = :email ORDER BY fecha DESC")
+    fun getNotasByEmail(email: String): Flow<List<Nota>>
 
     @Query("SELECT * FROM notas WHERE id = :id LIMIT 1")
     suspend fun getNotaById(id: String): Nota?
