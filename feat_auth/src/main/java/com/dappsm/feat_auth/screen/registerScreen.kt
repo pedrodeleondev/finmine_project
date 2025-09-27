@@ -51,7 +51,9 @@ fun RegisterScreen(
     LaunchedEffect(authState.value) {
         when (authState.value) {
 
-            is AuthState.Authenticated -> navController.navigate("profile")
+            is AuthState.Authenticated -> {
+                navController.navigate("main")
+            }
             is AuthState.Error -> Toast.makeText(
                 context,
                 (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT
@@ -112,7 +114,9 @@ fun RegisterScreen(
                 value = email,
                 onValueChange = { email = it },
                 placeholder = { Text("ej. maria_fer23@gmail.com") },
-                modifier = Modifier.fillMaxWidth().height(55.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -126,7 +130,9 @@ fun RegisterScreen(
                 value = password,
                 onValueChange = { password = it },
                 placeholder = { Text("ej. FhdW32*M") },
-                modifier = Modifier.fillMaxWidth().height(55.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp)
             )
 
             Spacer(modifier = Modifier.height(24.dp))

@@ -10,6 +10,7 @@ import java.util.UUID
 data class Nota(
     @PrimaryKey val id: String = UUID.randomUUID().toString(),
     val usuarioId: Int,
+    val usuarioEmail: String,
     val contenido: String,
     val fecha: LocalDateTime,
     val isDeleted: Boolean = false,
@@ -20,6 +21,7 @@ data class Nota(
         return mapOf(
             "id" to id,
             "usuarioId" to usuarioId,
+            "usuarioEmail" to usuarioEmail,
             "contenido" to contenido,
             "fecha" to fecha.format(f),
             "isDeleted" to isDeleted
@@ -31,6 +33,7 @@ data class Nota(
             return Nota(
                 id = map["id"] as String,
                 usuarioId = (map["usuarioId"] as Number).toInt(),
+                usuarioEmail = map["usuarioEmail"] as String,
                 contenido = map["contenido"] as String,
                 fecha = LocalDateTime.parse(map["fecha"] as String, f),
                 isDeleted = (map["isDeleted"] as? Boolean) ?: false,

@@ -21,77 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dappsm.data_core.model.Nota
 import com.dappsm.feat_notas.R
 import com.dappsm.feat_notas.viewmodel.NotaUiViewModel
-
-@Composable
-fun NotasBottomBar() {
-    NavigationBar(
-        containerColor = MaterialTheme.colorScheme.primaryContainer
-    ) {
-        NavigationBarItem(
-            selected = true,
-            onClick = { },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.billos),
-                    contentDescription = "Movimientos",
-                    modifier = Modifier.size(30.dp),
-                    tint = Color.Unspecified
-                )
-            },
-            colors = NavigationBarItemDefaults.colors(
-                indicatorColor = Color.Transparent
-            )
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.filterlist),
-                    contentDescription = "Lista filtrada",
-                    modifier = Modifier.size(30.dp),
-                    tint = Color.Unspecified
-                )
-            }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.notsrecientes),
-                    contentDescription = "Notas recientes",
-                    modifier = Modifier.size(30.dp),
-                    tint = Color.Unspecified
-                )
-            }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.cuentausuario),
-                    contentDescription = "Cuenta",
-                    modifier = Modifier.size(30.dp),
-                    tint = Color.Unspecified
-                )
-            }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = { },
-            icon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.sittings),
-                    contentDescription = "Configuración",
-                    modifier = Modifier.size(30.dp),
-                    tint = Color.Unspecified
-                )
-            }
-        )
-    }
-}
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -128,8 +58,7 @@ fun ListaNotas(
     val notas = viewModel.notas.collectAsState()
 
     Scaffold(
-        topBar = { TopBarNotas(onAddClick) },
-        bottomBar = { NotasBottomBar() }
+        topBar = { TopBarNotas(onAddClick) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -145,6 +74,9 @@ fun ListaNotas(
 
 @Composable
 fun NotaCard(nota: Nota) {
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+    val fechaFormateada = nota.fecha.format(formatter)
+
     val textFecha = buildAnnotatedString {
         withStyle(
             SpanStyle(
@@ -157,7 +89,7 @@ fun NotaCard(nota: Nota) {
                 color = MaterialTheme.colorScheme.primaryContainer,
                 fontWeight = FontWeight.Light
             )
-        ) { append(" ${nota.fecha}") }
+        ) { append(" $fechaFormateada") }
     }
 
     val textComentario = buildAnnotatedString {

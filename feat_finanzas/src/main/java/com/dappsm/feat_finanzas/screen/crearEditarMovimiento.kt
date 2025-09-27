@@ -3,6 +3,8 @@ package com.dappsm.feat_finanzas.screen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -63,165 +65,190 @@ fun formMovimiento(
     onBackClick: () -> Unit,
     viewModel: MovimientoUiViewModel = viewModel()
 ) {
-    var tipo by remember { mutableStateOf(movimientoExistente?.tipo ?: "") }
-    var monto by remember { mutableStateOf(movimientoExistente?.cantidad ?: "") }
-    var metodopago by remember { mutableStateOf(movimientoExistente?.metodoPago ?: "") }
-    var motivo by remember { mutableStateOf(movimientoExistente?.motivo ?: "") }
+    var tipo by remember { mutableStateOf("") }
+    var monto by remember { mutableStateOf("") }
+    var metodopago by remember { mutableStateOf("") }
+    var motivo by remember { mutableStateOf("") }
     val esEdicion = movimientoExistente != null
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        verticalArrangement = Arrangement.Top
-    ) {
-        topBarCMovements(esEdicion = esEdicion, onBackClick = onBackClick)
-        Spacer(modifier = Modifier.height(100.dp))
-        Text(
-            text = "Tipo de movimiento:",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Light,
-            color = MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 15.dp),
-        )
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp),
-            shape = RoundedCornerShape(10.dp),
-            value = tipo,
-            onValueChange = { tipo = it },
-            placeholder = { Text("ej. \"ingreso\"/\"egreso\"", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light) },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                cursorColor = MaterialTheme.colorScheme.background,
-                focusedTextColor = MaterialTheme.colorScheme.background,
-                unfocusedTextColor = MaterialTheme.colorScheme.background
-            )
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Monto:",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Light,
-            color = MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp),
-        )
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp),
-            shape = RoundedCornerShape(10.dp),
-            value = monto,
-            onValueChange = { monto = it },
-            placeholder = { Text("ej. \"120 pesos\"", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light) },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                cursorColor = MaterialTheme.colorScheme.background,
-                focusedTextColor = MaterialTheme.colorScheme.background,
-                unfocusedTextColor = MaterialTheme.colorScheme.background
-            )
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Método de pago:",
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Light,
-            color = MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp),
-        )
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp),
-            shape = RoundedCornerShape(10.dp),
-            value = metodopago,
-            onValueChange = { metodopago = it },
-            placeholder = { Text("ej. \"Efectivo\"/\"Tarjeta\"", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light) },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                cursorColor = MaterialTheme.colorScheme.background,
-                focusedTextColor = MaterialTheme.colorScheme.background,
-                unfocusedTextColor = MaterialTheme.colorScheme.background
-            )
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Motivo:",
-            fontSize = 20.sp,
-            maxLines = 3,
-            fontWeight = FontWeight.Light,
-            color = MaterialTheme.colorScheme.primaryContainer,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp),
-        )
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 15.dp, end = 15.dp),
-            shape = RoundedCornerShape(10.dp),
-            value = motivo,
-            onValueChange = { motivo = it },
-            placeholder = { Text("ej.\"Pago de préstamo\"", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light) },
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
-                focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                cursorColor = MaterialTheme.colorScheme.background,
-                focusedTextColor = MaterialTheme.colorScheme.background,
-                unfocusedTextColor = MaterialTheme.colorScheme.background
-            )
-        )
-        Spacer(modifier = Modifier.height(70.dp))
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
-            Button(
-                onClick = {
-                    if (!esEdicion) {
-                        viewModel.agregar(
-                            usuarioId = 1,
-                            tipo = tipo,
-                            cantidadStr = monto,
-                            metodoPago = metodopago,
-                            motivo = motivo
-                        )
-                    }
-                    onBackClick()
-                },
+    LaunchedEffect(movimientoExistente) {
+        if (movimientoExistente != null) {
+            tipo = movimientoExistente.tipo
+            monto = movimientoExistente.cantidad
+            metodopago = movimientoExistente.metodoPago
+            motivo = movimientoExistente.motivo ?: ""
+        }
+    }
+
+    Scaffold(
+        topBar = { topBarCMovements(esEdicion = esEdicion, onBackClick = onBackClick) },
+        bottomBar = {
+            Box(
                 modifier = Modifier
-                    .width(340.dp)
-                    .height(74.dp)
-                    .padding(vertical = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
-                shape = RoundedCornerShape(10.dp)
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    modifier = Modifier.fillMaxSize(),
-                    textAlign = TextAlign.Center,
-                    text = if (esEdicion) "Actualizar " else "Agregar ",
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+                Button(
+                    onClick = {
+                        if (esEdicion) {
+                            viewModel.actualizar(
+                                movimientoExistente!!,
+                                tipo,
+                                monto,
+                                metodopago,
+                                motivo
+                            )
+                        } else {
+                            viewModel.agregar(
+                                usuarioId = 1,
+                                tipo = tipo,
+                                cantidadStr = monto,
+                                metodoPago = metodopago,
+                                motivo = motivo
+                            )
+                        }
+                        onBackClick()
+                    },
+                    modifier = Modifier
+                        .width(250.dp)
+                        .height(40.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
+                    shape = RoundedCornerShape(10.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxSize(),
+                        textAlign = TextAlign.Center,
+                        text = if (esEdicion) "Actualizar " else "Agregar ",
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
             }
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Top
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Tipo de movimiento:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Light,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp),
+            )
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp),
+                shape = RoundedCornerShape(10.dp),
+                value = tipo,
+                onValueChange = { tipo = it },
+                placeholder = { Text("ej. \"ingreso\"/\"egreso\"", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                    focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    cursorColor = MaterialTheme.colorScheme.background,
+                    focusedTextColor = MaterialTheme.colorScheme.background,
+                    unfocusedTextColor = MaterialTheme.colorScheme.background
+                )
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = "Monto:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Light,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp),
+            )
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp),
+                shape = RoundedCornerShape(10.dp),
+                value = monto,
+                onValueChange = { monto = it },
+                placeholder = { Text("ej. \"120 pesos\"", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                    focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    cursorColor = MaterialTheme.colorScheme.background,
+                    focusedTextColor = MaterialTheme.colorScheme.background,
+                    unfocusedTextColor = MaterialTheme.colorScheme.background
+                )
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = "Método de pago:",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Light,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp),
+            )
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp),
+                shape = RoundedCornerShape(10.dp),
+                value = metodopago,
+                onValueChange = { metodopago = it },
+                placeholder = { Text("ej. \"Efectivo\"/\"Tarjeta\"", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                    focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    cursorColor = MaterialTheme.colorScheme.background,
+                    focusedTextColor = MaterialTheme.colorScheme.background,
+                    unfocusedTextColor = MaterialTheme.colorScheme.background
+                )
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = "Motivo:",
+                fontSize = 20.sp,
+                maxLines = 3,
+                fontWeight = FontWeight.Light,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp),
+            )
+            OutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp),
+                shape = RoundedCornerShape(10.dp),
+                value = motivo,
+                onValueChange = { motivo = it },
+                placeholder = { Text("ej.\"Pago de préstamo\"", color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light) },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primaryContainer,
+                    focusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    unfocusedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    cursorColor = MaterialTheme.colorScheme.background,
+                    focusedTextColor = MaterialTheme.colorScheme.background,
+                    unfocusedTextColor = MaterialTheme.colorScheme.background
+                )
+            )
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }

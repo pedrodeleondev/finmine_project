@@ -1,5 +1,6 @@
 package com.dappsm.ui_core.theme
 
+import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle

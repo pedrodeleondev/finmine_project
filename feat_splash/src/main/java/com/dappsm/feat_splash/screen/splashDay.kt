@@ -18,16 +18,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.dappsm.feat_splash.R
-import com.dappsm.nav_core.AppScreens
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashDayScreen(navController: NavController) {
-    LaunchedEffect(true) {
-        delay(1500)
-        navController.popBackStack()
-        navController.navigate(AppScreens.authScreen.route)
-    }
+fun SplashDayScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -37,7 +31,9 @@ fun SplashDayScreen(navController: NavController) {
         Image(
             painter = painterResource(id = R.drawable.logoday),
             contentDescription = "Logo Day",
-            modifier = Modifier.size(240.dp).padding(top=15.dp)
+            modifier = Modifier
+                .size(240.dp)
+                .padding(top = 15.dp)
         )
     }
 }

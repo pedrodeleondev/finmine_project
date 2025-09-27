@@ -18,6 +18,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.dappsm.data_core.model.Movimiento
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -70,6 +71,9 @@ fun DetallesMovimiento(
     onBackClick: () -> Unit,
     onEditClick: () -> Unit
 ) {
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+    val fechaFormateada = movimiento.fecha.format(formatter)
+
     Scaffold(contentWindowInsets = WindowInsets(0.dp)) { innerPadding ->
         Column(
             modifier = Modifier
@@ -122,7 +126,7 @@ fun DetallesMovimiento(
                 Spacer(modifier = Modifier.height(60.dp))
                 val textFecha = buildAnnotatedString {
                     withStyle(SpanStyle(color = MaterialTheme.colorScheme.primaryContainer, fontWeight = FontWeight.SemiBold)) { append("Fecha:") }
-                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.primaryContainer, fontWeight = FontWeight.Light)) { append(" ${movimiento.fecha}") }
+                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.primaryContainer, fontWeight = FontWeight.Light)) { append(" $fechaFormateada") }
                 }
                 Text(
                     text = textFecha,
@@ -156,15 +160,16 @@ fun DetallesMovimiento(
                         onClick = { onEditClick() },
                         modifier = Modifier
                             .width(300.dp)
-                            .height(90.dp)
-                            .padding(vertical = 16.dp),
+                            .height(150.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
                         shape = RoundedCornerShape(10.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Editar",
-                            modifier = Modifier.padding(end = 8.dp).size(24.dp)
+                            modifier = Modifier
+                                .padding(end = 8.dp)
+                                .size(24.dp)
                         )
                         Text(
                             modifier = Modifier.fillMaxWidth(),

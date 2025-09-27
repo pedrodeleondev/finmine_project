@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MovimientoDao {
-    @Query("SELECT * FROM movimientos WHERE isDeleted = 0 ORDER BY fecha DESC")
-    fun getAllMovimientos(): Flow<List<Movimiento>>
+    @Query("SELECT * FROM movimientos WHERE isDeleted = 0 AND usuarioEmail = :email ORDER BY fecha DESC")
+    fun getMovimientosByEmail(email: String): Flow<List<Movimiento>>
 
     @Query("SELECT * FROM movimientos WHERE id = :id LIMIT 1")
     suspend fun getMovimientoById(id: String): Movimiento?
