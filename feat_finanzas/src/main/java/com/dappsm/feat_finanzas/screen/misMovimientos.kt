@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -37,6 +38,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun MisMovimientosCard(
     viewModel: MovimientoUiViewModel = viewModel(),
+    ingresoColor: Color,
+    egresoColor: Color,
     onAddClick: () -> Unit = {},
     onEditClick: (Movimiento) -> Unit = {},
     onDetailsClick: (Movimiento) -> Unit = {}
@@ -68,6 +71,8 @@ fun MisMovimientosCard(
             items(movimientos, key = { it.id }) { movimiento ->
                 MovimientoCard(
                     movimiento = movimiento,
+                    ingresoColor = ingresoColor,
+                    egresoColor = egresoColor,
                     onDelete = { viewModel.eliminar(movimiento) },
                     onEditClick = { onEditClick(movimiento) },
                     onDetailsClick = { onDetailsClick(movimiento) }
@@ -97,6 +102,8 @@ fun MisMovimientosTopBar() {
 @Composable
 fun MovimientoCard(
     movimiento: Movimiento,
+    ingresoColor: Color,
+    egresoColor: Color,
     onDelete: () -> Unit,
     onEditClick: () -> Unit,
     onDetailsClick: () -> Unit
@@ -116,11 +123,7 @@ fun MovimientoCard(
                 )
             ),
         colors = CardDefaults.cardColors(
-            containerColor = if (movimiento.tipo.lowercase() == "ingreso") {
-                MaterialTheme.colorScheme.onErrorContainer
-            } else {
-                MaterialTheme.colorScheme.error
-            }
+            containerColor = if (movimiento.tipo.lowercase() == "ingreso") ingresoColor else egresoColor
         ),
         shape = RoundedCornerShape(10.dp),
         onClick = { estadoExpan = !estadoExpan }

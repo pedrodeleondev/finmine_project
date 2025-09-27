@@ -52,7 +52,6 @@ dependencies {
     implementation(project(":ui_core"))
     implementation(project(":feat_splash"))
     implementation(project(":feat_finanzas"))
-
     implementation(project(":feat_config"))
 
     // Google / Firebase

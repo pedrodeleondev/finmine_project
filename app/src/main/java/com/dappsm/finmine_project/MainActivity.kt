@@ -9,8 +9,10 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dappsm.data_core.database.AppDatabaseInstance
 import com.dappsm.feat_auth.viewmodel.authviewmodel
+import com.dappsm.feat_config.viewmodel.ConfigViewModel
 import com.dappsm.finmine_project.ui.theme.Finmine_projectTheme
 import com.dappsm.feat_splash.screen.SplashDayScreen
+import com.dappsm.feat_splash.screen.SplashNightScreen
 import com.dappsm.nav_core.root.RootNavigation
 import kotlinx.coroutines.delay
 
@@ -19,7 +21,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            Finmine_projectTheme {
+            val configViewModel: ConfigViewModel = viewModel()
+            val isDarkMode by configViewModel.isDarkMode.collectAsState()
+            Finmine_projectTheme(darkTheme = isDarkMode) {
                 Surface(color = MaterialTheme.colorScheme.background) {
                     var showSplash by remember { mutableStateOf(true) }
                     val vm: authviewmodel = viewModel()
@@ -31,13 +35,16 @@ class MainActivity : ComponentActivity() {
                     }
 
                     if (showSplash) {
-                        SplashDayScreen()
+                        if (isDarkMode) {
+                            SplashNightScreen()
+                        } else {
+                            SplashDayScreen()
+                        }
                     } else {
-                        RootNavigation(vm)
+                        RootNavigation(vm, configViewModel)
                     }
                 }
             }
         }
     }
 }
-

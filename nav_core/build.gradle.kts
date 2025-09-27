@@ -43,8 +43,10 @@ dependencies {
     implementation(project(":feat_notas"))
     implementation(project(":feat_finanzas"))
     implementation(project(":feat_auth"))
+    implementation(project(":feat_config"))
     implementation(project(":data_core"))
     implementation(project(":feat_splash"))
+    implementation(project(":ui_core"))
 
 
     // AndroidX Core / Lifecycle

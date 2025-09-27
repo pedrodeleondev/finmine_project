@@ -19,12 +19,7 @@ import com.dappsm.feat_splash.R
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashNightScreen(navController: NavController){
-    LaunchedEffect(true) {
-        delay(1500)
-        navController.popBackStack()
-        navController.navigate("login")
-    }
+fun SplashNightScreen(){
     Box(
         modifier = Modifier
             .fillMaxSize()
