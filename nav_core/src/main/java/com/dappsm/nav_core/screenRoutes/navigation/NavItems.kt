@@ -12,26 +12,26 @@ val listOfNavItems: List<NavItem> = listOf(
     NavItem(
         label = "Movimientos",
         icon = R.drawable.dinero,
-        route = Screens.movimientosScreen.name
+        route = Screens.Movimientos.route
     ),
     NavItem(
         label = "Mensuales",
         icon = R.drawable.mensuales,
-        route = Screens.mensualesScreen.name
+        route = Screens.Mensuales.route
     ),
     NavItem(
         label = "Notas",
         icon = R.drawable.notas,
-        route = Screens.notasScreen.name
+        route = Screens.Notas.route
     ),
     NavItem(
         label = "Perfil",
         icon = R.drawable.perfil,
-        route = Screens.perfilScreen.name
+        route = Screens.Perfil.route
     ),
     NavItem(
         label = "Config",
         icon = R.drawable.config,
-        route = Screens.configScreen.name
+        route = Screens.Config.route
     )
 )

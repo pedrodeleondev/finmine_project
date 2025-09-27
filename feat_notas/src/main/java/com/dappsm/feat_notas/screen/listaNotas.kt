@@ -21,8 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dappsm.data_core.model.Nota
 import com.dappsm.feat_notas.R
 import com.dappsm.feat_notas.viewmodel.NotaUiViewModel
-
-
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,6 +74,9 @@ fun ListaNotas(
 
 @Composable
 fun NotaCard(nota: Nota) {
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+    val fechaFormateada = nota.fecha.format(formatter)
+
     val textFecha = buildAnnotatedString {
         withStyle(
             SpanStyle(
@@ -87,7 +89,7 @@ fun NotaCard(nota: Nota) {
                 color = MaterialTheme.colorScheme.primaryContainer,
                 fontWeight = FontWeight.Light
             )
-        ) { append(" ${nota.fecha}") }
+        ) { append(" $fechaFormateada") }
     }
 
     val textComentario = buildAnnotatedString {

@@ -1,21 +1,21 @@
 package com.dappsm.nav_core.screenRoutes.navigation
 
-enum class Screens {
+sealed class Screens(val route: String) {
     // ====== Movimientos ======
-    movimientosScreen,
-    formMovimientoScreen,
-    detalleMovimientoScreen,
+    object Movimientos : Screens("movimientos")
+    object FormMovimiento : Screens("formMovimiento")
+    object DetalleMovimiento : Screens("detalleMovimiento")
 
     // ====== Mensuales ======
-    mensualesScreen,
+    object Mensuales : Screens("mensuales")
 
     // ====== Notas ======
-    notasScreen,
-    formNotaScreen,
+    object Notas : Screens("notas")
+    object FormNota : Screens("formNota")
 
     // ====== Perfil ======
-    perfilScreen,
+    object Perfil : Screens("perfil")
 
     // ====== Configuración ======
-    configScreen
+    object Config : Screens("config")
 }

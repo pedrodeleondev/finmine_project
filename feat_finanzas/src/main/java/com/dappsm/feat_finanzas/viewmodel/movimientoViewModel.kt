@@ -26,16 +26,9 @@ class MovimientoUiViewModel(app: Application) : AndroidViewModel(app) {
     val movimientos = repo.getMovimientosByEmail(emailUsuario)
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    fun agregar(
-        usuarioId: Int,
-        tipo: String,
-        cantidadStr: String,
-        metodoPago: String,
-        motivo: String?
-    ) {
+    fun agregar(usuarioId: Int, tipo: String, cantidadStr: String, metodoPago: String, motivo: String?) {
         val now = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
-
         val m = Movimiento(
             usuarioId = usuarioId,
             usuarioEmail = emailUsuario,
@@ -47,9 +40,20 @@ class MovimientoUiViewModel(app: Application) : AndroidViewModel(app) {
             metodoPago = metodoPago,
             motivo = motivo
         )
-
         viewModelScope.launch {
             repo.insertMovimiento(getApplication(), m, hayInternet = true)
+        }
+    }
+
+    fun actualizar(movimiento: Movimiento, tipo: String, cantidadStr: String, metodoPago: String, motivo: String?) {
+        val actualizado = movimiento.copy(
+            tipo = tipo,
+            cantidad = cantidadStr,
+            metodoPago = metodoPago,
+            motivo = motivo
+        )
+        viewModelScope.launch {
+            repo.updateMovimiento(getApplication(), actualizado, hayInternet = true)
         }
     }
 

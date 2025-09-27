@@ -5,10 +5,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -18,7 +20,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.dappsm.data_core.model.Movimiento
 import com.dappsm.feat_auth.screen.LoginScreen
 import com.dappsm.feat_auth.screen.ProfileScreen
 import com.dappsm.feat_auth.screen.RegisterScreen
@@ -49,14 +50,12 @@ fun RootNavigation(authViewModel: authviewmodel) {
                     launchSingleTop = true
                 }
             }
-
             is AuthState.Unauthenticated -> {
                 navController.navigate("login") {
                     popUpTo("main") { inclusive = true }
                     launchSingleTop = true
                 }
             }
-
             else -> Unit
         }
     }
@@ -64,9 +63,7 @@ fun RootNavigation(authViewModel: authviewmodel) {
     NavHost(navController = navController, startDestination = "splash") {
         composable("splash") {
             SplashDayScreen()
-            LaunchedEffect(Unit) {
-                delay(1500)
-            }
+            LaunchedEffect(Unit) { delay(1500) }
         }
         composable("login") {
             LoginScreen(navController, authViewModel)
@@ -87,76 +84,81 @@ fun MainScaffold(rootNavController: NavHostController, authViewModel: authviewmo
     Scaffold(bottomBar = { BottomNavBar(navController = innerNavController) }) { innerPadding: PaddingValues ->
         NavHost(
             navController = innerNavController,
-            startDestination = Screens.movimientosScreen.name,
+            startDestination = Screens.Movimientos.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            composable(Screens.movimientosScreen.name) {
+            composable(Screens.Movimientos.route) {
                 val vm: MovimientoUiViewModel = viewModel()
                 MisMovimientosCard(
                     viewModel = vm,
-                    onAddClick = { innerNavController.navigate(Screens.formMovimientoScreen.name) },
+                    onAddClick = { innerNavController.navigate(Screens.FormMovimiento.route) },
                     onEditClick = { movimiento ->
-                        innerNavController.currentBackStackEntry?.savedStateHandle?.set(
-                            "movimiento",
-                            movimiento
-                        )
-                        innerNavController.navigate(Screens.formMovimientoScreen.name)
+                        innerNavController.navigate("${Screens.FormMovimiento.route}/${movimiento.id}")
                     },
                     onDetailsClick = { movimiento ->
-                        innerNavController.currentBackStackEntry?.savedStateHandle?.set(
-                            "movimiento",
-                            movimiento
-                        )
-                        innerNavController.navigate(Screens.detalleMovimientoScreen.name)
+                        innerNavController.navigate("${Screens.DetalleMovimiento.route}/${movimiento.id}")
                     }
                 )
             }
-            composable(Screens.formMovimientoScreen.name) {
+
+            composable(Screens.FormMovimiento.route) {
                 val vm: MovimientoUiViewModel = viewModel()
-                val movimiento =
-                    innerNavController.previousBackStackEntry?.savedStateHandle?.get<Movimiento>("movimiento")
+                formMovimiento(
+                    movimientoExistente = null,
+                    onBackClick = { innerNavController.popBackStack() },
+                    viewModel = vm
+                )
+            }
+
+            composable("${Screens.FormMovimiento.route}/{id}") { backStackEntry ->
+                val vm: MovimientoUiViewModel = viewModel()
+                val id = backStackEntry.arguments?.getString("id")
+                val movimientos by vm.movimientos.collectAsState()
+                val movimiento = movimientos.firstOrNull { it.id == id }
                 formMovimiento(
                     movimientoExistente = movimiento,
                     onBackClick = { innerNavController.popBackStack() },
                     viewModel = vm
                 )
             }
-            composable(Screens.detalleMovimientoScreen.name) {
-                val movimiento =
-                    innerNavController.previousBackStackEntry?.savedStateHandle?.get<Movimiento>("movimiento")
+
+            composable("${Screens.DetalleMovimiento.route}/{id}") { backStackEntry ->
+                val vm: MovimientoUiViewModel = viewModel()
+                val id = backStackEntry.arguments?.getString("id")
+                val movimientos by vm.movimientos.collectAsState()
+                val movimiento = movimientos.firstOrNull { it.id == id }
                 if (movimiento != null) {
                     DetallesMovimiento(
                         movimiento = movimiento,
                         onBackClick = { innerNavController.popBackStack() },
                         onEditClick = {
-                            innerNavController.currentBackStackEntry?.savedStateHandle?.set(
-                                "movimiento",
-                                movimiento
-                            )
-                            innerNavController.navigate(Screens.formMovimientoScreen.name)
+                            innerNavController.navigate("${Screens.FormMovimiento.route}/${movimiento.id}")
                         }
                     )
                 }
             }
-            composable(Screens.notasScreen.name) {
+
+            composable(Screens.Notas.route) {
                 val vm: NotaUiViewModel = viewModel()
                 ListaNotas(
                     viewModel = vm,
-                    onAddClick = { innerNavController.navigate(Screens.formNotaScreen.name) }
+                    onAddClick = { innerNavController.navigate(Screens.FormNota.route) }
                 )
             }
-            composable(Screens.formNotaScreen.name) {
+            composable(Screens.FormNota.route) {
                 val vm: NotaUiViewModel = viewModel()
                 formNuevaNota(viewModel = vm, onBackClick = { innerNavController.popBackStack() })
             }
-            composable(Screens.perfilScreen.name) {
+
+            composable(Screens.Perfil.route) {
                 ProfileScreen(
                     authViewModel = authViewModel,
                     onLogout = { authViewModel.signout() }
                 )
             }
-            composable(Screens.mensualesScreen.name) { }
-            composable(Screens.configScreen.name) { }
+
+            composable(Screens.Mensuales.route) { }
+            composable(Screens.Config.route) { }
         }
     }
 }
@@ -166,23 +168,31 @@ fun BottomNavBar(navController: NavHostController) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
-    NavigationBar {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.primaryContainer
+    ) {
         listOfNavItems.forEach { item ->
             NavigationBarItem(
                 selected = currentRoute == item.route,
                 onClick = {
                     navController.navigate(item.route) {
                         launchSingleTop = true
-                        popUpTo(Screens.movimientosScreen.name)
+                        popUpTo(Screens.Movimientos.route)
                     }
                 },
                 icon = {
                     Icon(
                         painter = androidx.compose.ui.res.painterResource(id = item.icon),
-                        contentDescription = item.label
+                        contentDescription = item.label,
+                        tint = MaterialTheme.colorScheme.background
                     )
                 },
-                label = null
+                label = null,
+                colors = NavigationBarItemDefaults.colors(
+                    selectedIconColor = MaterialTheme.colorScheme.background,
+                    unselectedIconColor = MaterialTheme.colorScheme.background,
+                    indicatorColor = MaterialTheme.colorScheme.primaryContainer
+                )
             )
         }
     }

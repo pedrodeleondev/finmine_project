@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -32,6 +31,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dappsm.data_core.model.Movimiento
 import com.dappsm.feat_finanzas.R
 import com.dappsm.feat_finanzas.viewmodel.MovimientoUiViewModel
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -103,6 +103,7 @@ fun MovimientoCard(
 ) {
     var estadoExpan by remember { mutableStateOf(false) }
     val rotacion by animateFloatAsState(targetValue = if (estadoExpan) 180f else 0f)
+    val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
 
     Card(
         modifier = Modifier
@@ -132,7 +133,7 @@ fun MovimientoCard(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 val textFechaHora = buildAnnotatedString {
                     withStyle(SpanStyle(color = MaterialTheme.colorScheme.onPrimaryContainer)) {
-                        append(" ${movimiento.fecha}")
+                        append(" ${movimiento.fecha.format(formatter)}")
                     }
                 }
                 Text(
@@ -216,4 +217,3 @@ fun MovimientoCard(
         }
     }
 }
-
