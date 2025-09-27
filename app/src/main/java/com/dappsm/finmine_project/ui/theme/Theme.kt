@@ -22,9 +22,7 @@ private val DarkColorScheme = darkColorScheme(
     background = GrisOscuro,
     surface = GrisOscuro,
     error = Rojo,
-    onErrorContainer = Verde,
     surfaceContainer = BeigeRosa,
-    onTertiary = GrisOscuro,
 
     onPrimary = GrisOscuro,
     onPrimaryContainer = GrisOscuro,
@@ -44,7 +42,6 @@ private val LightColorScheme = lightColorScheme(
     error = Rojo,
     onErrorContainer = Verde,
     surfaceContainer = gris,
-    onTertiary = GrisOscuro,
 
     onPrimary = Blanco,
     onPrimaryContainer = Blanco,
