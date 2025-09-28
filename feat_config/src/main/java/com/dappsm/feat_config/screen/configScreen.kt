@@ -36,28 +36,37 @@ fun ConfigScreen(viewModel: ConfigViewModel) {
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Configuración",
-            style = MaterialTheme.typography.headlineLarge.copy(
-                color = MaterialTheme.colorScheme.primaryContainer
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Text(
+                text = "Configuración",
+                style = MaterialTheme.typography.headlineLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 28.sp,
+                    color = MaterialTheme.colorScheme.primaryContainer
+                )
             )
-        )
+        }
 
         Spacer(modifier = Modifier.height(30.dp))
 
         Text(
             text = "Selecciona el modo",
             style = MaterialTheme.typography.titleMedium.copy(
-                color = MaterialTheme.colorScheme.onBackground,
-                fontSize = 20.sp
-            )
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = MaterialTheme.colorScheme.onBackground
+            ),
+            textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(50.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
                 onClick = { viewModel.setDarkMode(true) },
@@ -95,48 +104,54 @@ fun ConfigScreen(viewModel: ConfigViewModel) {
         Text(
             text = "Cambio de colores",
             style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
                 color = MaterialTheme.colorScheme.primaryContainer
-            )
+            ),
+            textAlign = TextAlign.Center
         )
         Text(
             text = "En esta sección podrás cambiar el color de tus movimientos",
             style = MaterialTheme.typography.bodyMedium.copy(
+                fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.primaryContainer
-            )
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(30.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(40.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             ColorOption(
                 ingreso = DefaultIngreso,
                 egreso = DefaultEgreso,
                 label = "Default",
-                desc = "verde-ingresos,\nrojo-egresos"
+                desc = "donde verde-ingresos,\nrojo-egresos"
             ) { viewModel.setColors(DefaultIngreso, DefaultEgreso) }
 
             ColorOption(
                 ingreso = CakeIngreso,
                 egreso = CakeEgreso,
                 label = "Cake",
-                desc = "celeste-ingresos,\nrosa-egresos"
+                desc = "donde celeste-ingresos,\nrosa-egresos"
             ) { viewModel.setColors(CakeIngreso, CakeEgreso) }
         }
 
         Spacer(modifier = Modifier.height(30.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             ColorOption(
                 ingreso = DesertIngreso,
                 egreso = DesertEgreso,
                 label = "Desert",
-                desc = "amarillo-ingresos,\nnaranja-egresos"
+                desc = "donde amarillo-ingresos,\nnaranja-egresos"
             ) { viewModel.setColors(DesertIngreso, DesertEgreso) }
         }
     }
@@ -154,17 +169,19 @@ fun ColorOption(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.clickable { onClick() }
     ) {
-        Row {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Box(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(55.dp)
                     .clip(CircleShape)
                     .background(ingreso)
             )
-            Spacer(modifier = Modifier.width(10.dp))
             Box(
                 modifier = Modifier
-                    .size(50.dp)
+                    .size(55.dp)
                     .clip(CircleShape)
                     .background(egreso)
             )
