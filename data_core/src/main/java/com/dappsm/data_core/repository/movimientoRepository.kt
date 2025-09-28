@@ -10,14 +10,23 @@ import com.dappsm.data_core.dao.MovimientoDao
 import com.dappsm.data_core.firebase.FirebaseMovimientoService
 import com.dappsm.data_core.model.Movimiento
 import com.dappsm.data_core.work.SyncMovimientosWorker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 class MovimientoRepository(
     private val dao: MovimientoDao,
     private val firebaseService: FirebaseMovimientoService
 ) {
-    fun getMovimientosByEmail(email: String): Flow<List<Movimiento>> =
-        dao.getMovimientosByEmail(email)
+    fun getMovimientosByEmail(email: String): Flow<List<Movimiento>> {
+        CoroutineScope(Dispatchers.IO).launch {
+            firebaseService.getMovimientosByEmail(email).collect { remotos ->
+                dao.insertAll(remotos)
+            }
+        }
+        return dao.getMovimientosByEmail(email)
+    }
 
     suspend fun getMovimientoById(id: String): Movimiento? = dao.getMovimientoById(id)
 
@@ -46,7 +55,6 @@ class MovimientoRepository(
     }
 
     suspend fun getPending(): List<Movimiento> = dao.getPending()
-
     suspend fun clearPending(id: String) = dao.clearPending(id)
 
     private fun enqueueOneTime(context: Context) {

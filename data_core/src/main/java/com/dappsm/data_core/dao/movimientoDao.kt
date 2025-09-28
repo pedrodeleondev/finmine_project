@@ -20,6 +20,9 @@ interface MovimientoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovimiento(mov: Movimiento)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(movs: List<Movimiento>)
+
     @Update
     suspend fun updateMovimiento(mov: Movimiento)
 
