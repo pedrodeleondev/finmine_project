@@ -38,13 +38,13 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun MisMovimientosCard(
     viewModel: MovimientoUiViewModel = viewModel(),
-    ingresoColor: Color,
-    egresoColor: Color,
     onAddClick: () -> Unit = {},
     onEditClick: (Movimiento) -> Unit = {},
     onDetailsClick: (Movimiento) -> Unit = {}
 ) {
     val movimientos by viewModel.movimientos.collectAsState()
+    val ingresoColor by viewModel.ingresoColor.collectAsState()
+    val egresoColor by viewModel.egresoColor.collectAsState()
 
     Scaffold(
         topBar = { MisMovimientosTopBar() },

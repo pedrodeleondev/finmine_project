@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -84,14 +83,14 @@ fun LoginScreen(
             Text(
                 text = "Fin Mine",
                 fontFamily = Poppins,
-                style = TextStyle(fontSize = 58.sp),
+                style = TextStyle(fontSize = 58.sp, color = MaterialTheme.colorScheme.onBackground),
                 fontWeight = FontWeight.Normal
             )
             Text(
                 text = "TU DINERO, TU CONTROL",
                 fontFamily = Poppins,
                 fontWeight = FontWeight.Normal,
-                style = TextStyle(fontSize = 20.sp)
+                style = TextStyle(fontSize = 20.sp, color = MaterialTheme.colorScheme.onBackground)
             )
 
             Spacer(modifier = Modifier.height(40.dp))
@@ -99,7 +98,7 @@ fun LoginScreen(
             Text(
                 text = "INICIA SESIÓN",
                 fontFamily = Poppins,
-                color = Color(0xFFDC652D),
+                color = MaterialTheme.colorScheme.tertiary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp
             )
@@ -112,13 +111,14 @@ fun LoginScreen(
                 Text(
                     text = "Correo electrónico:",
                     fontFamily = Poppins,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                placeholder = { Text("ej. prueba@gmail.com", fontFamily = Poppins) },
+                placeholder = { Text("ej. prueba@gmail.com", fontFamily = Poppins, color = MaterialTheme.colorScheme.onBackground) },
                 modifier = Modifier.fillMaxWidth().height(55.dp),
             )
 
@@ -127,12 +127,17 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.Start,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(text = "Contraseña:", fontFamily = Poppins, fontWeight = FontWeight.Medium)
+                Text(
+                    text = "Contraseña:",
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
             }
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                placeholder = { Text("ej. FhdW32*M", fontFamily = Poppins) },
+                placeholder = { Text("ej. FhdW32*M", fontFamily = Poppins, color = MaterialTheme.colorScheme.onBackground) },
                 modifier = Modifier.fillMaxWidth().height(55.dp)
             )
 
@@ -146,13 +151,13 @@ fun LoginScreen(
                 Text(
                     text = "¿No tienes cuenta?",
                     fontFamily = Poppins,
-                    style = TextStyle(fontSize = 12.sp)
+                    style = TextStyle(fontSize = 12.sp, color = MaterialTheme.colorScheme.onBackground)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = "Regístrate aquí",
                     fontFamily = Poppins,
-                    color = Color(0xFFDC652D),
+                    color = MaterialTheme.colorScheme.tertiary,
                     style = TextStyle(fontSize = 12.sp),
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable {
@@ -171,10 +176,10 @@ fun LoginScreen(
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier.width(230.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF3B3039)
+                    containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
-                Text(text = "Iniciar Sesión", fontFamily = Poppins, color = Color.White)
+                Text(text = "Iniciar Sesión", fontFamily = Poppins, color = MaterialTheme.colorScheme.onPrimary)
             }
 
             Spacer(modifier = Modifier.height(16.dp))

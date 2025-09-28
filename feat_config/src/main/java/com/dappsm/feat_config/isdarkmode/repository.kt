@@ -1,13 +1,16 @@
 package com.dappsm.feat_config.isdarkmode
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
+
 class SettingsRepository(private val dao: SettingsDao) {
 
-    suspend fun loadSettings(): SettingsEntity? {
+    fun loadSettings(): Flow<SettingsEntity?> {
         return dao.getSettings()
     }
 
     suspend fun setDarkMode(enabled: Boolean) {
-        val current = dao.getSettings()
+        val current = dao.getSettings().firstOrNull()
         dao.saveSettings(
             SettingsEntity(
                 id = 1,
@@ -19,7 +22,7 @@ class SettingsRepository(private val dao: SettingsDao) {
     }
 
     suspend fun setColors(ingreso: Long, egreso: Long) {
-        val current = dao.getSettings()
+        val current = dao.getSettings().firstOrNull()
         dao.saveSettings(
             SettingsEntity(
                 id = 1,

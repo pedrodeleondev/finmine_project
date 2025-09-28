@@ -7,6 +7,6 @@ import androidx.room.PrimaryKey
 data class SettingsEntity(
     @PrimaryKey val id: Int = 1,
     val isDarkMode: Boolean = false,
-    val ingresoColor: Long = 0xFFAFC357, // verde por defecto
-    val egresoColor: Long = 0xFFD9585A   // rojo por defecto
+    val ingresoColor: Long = 0xFFAFC357, // verde default
+    val egresoColor: Long = 0xFFD9585A   // rojo default
 )

@@ -42,7 +42,7 @@ fun TopBarNotas(onAddClick: () -> Unit) {
                 Icon(
                     painter = painterResource(id = R.drawable.agregarnota),
                     contentDescription = "Agregar nota",
-                    tint = Color.Unspecified,
+                    tint = MaterialTheme.colorScheme.primaryContainer,
                     modifier = Modifier.size(30.dp)
                 )
             }

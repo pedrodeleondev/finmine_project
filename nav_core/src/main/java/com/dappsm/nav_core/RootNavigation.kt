@@ -28,6 +28,7 @@ import com.dappsm.feat_auth.viewmodel.authviewmodel
 import com.dappsm.feat_config.screen.ConfigScreen
 import com.dappsm.feat_config.viewmodel.ConfigViewModel
 import com.dappsm.feat_finanzas.screen.DetallesMovimiento
+import com.dappsm.feat_finanzas.screen.IngresosEgresosMes
 import com.dappsm.feat_finanzas.screen.MisMovimientosCard
 import com.dappsm.feat_finanzas.screen.formMovimiento
 import com.dappsm.feat_finanzas.viewmodel.MovimientoUiViewModel
@@ -74,16 +75,22 @@ fun RootNavigation(authViewModel: authviewmodel, configViewModel: ConfigViewMode
             RegisterScreen(navController, authViewModel)
         }
         composable("main") {
-            MainScaffold(rootNavController = navController, authViewModel = authViewModel, configViewModel = configViewModel)
+            MainScaffold(
+                rootNavController = navController,
+                authViewModel = authViewModel,
+                configViewModel = configViewModel
+            )
         }
     }
 }
 
 @Composable
-fun MainScaffold(rootNavController: NavHostController, authViewModel: authviewmodel, configViewModel: ConfigViewModel) {
+fun MainScaffold(
+    rootNavController: NavHostController,
+    authViewModel: authviewmodel,
+    configViewModel: ConfigViewModel
+) {
     val innerNavController = rememberNavController()
-    val ingresoColor by configViewModel.colorIngreso.collectAsState()
-    val egresoColor by configViewModel.colorEgreso.collectAsState()
 
     Scaffold(bottomBar = { BottomNavBar(navController = innerNavController) }) { innerPadding: PaddingValues ->
         NavHost(
@@ -95,8 +102,6 @@ fun MainScaffold(rootNavController: NavHostController, authViewModel: authviewmo
                 val vm: MovimientoUiViewModel = viewModel()
                 MisMovimientosCard(
                     viewModel = vm,
-                    ingresoColor = ingresoColor,
-                    egresoColor = egresoColor,
                     onAddClick = { innerNavController.navigate(Screens.FormMovimiento.route) },
                     onEditClick = { movimiento ->
                         innerNavController.navigate("${Screens.FormMovimiento.route}/${movimiento.id}")
@@ -163,7 +168,10 @@ fun MainScaffold(rootNavController: NavHostController, authViewModel: authviewmo
                 )
             }
 
-            composable(Screens.Mensuales.route) { }
+            composable(Screens.Mensuales.route) {
+                IngresosEgresosMes()
+            }
+
             composable(Screens.Config.route) {
                 ConfigScreen(viewModel = configViewModel)
             }
