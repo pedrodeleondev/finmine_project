@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -55,18 +53,45 @@ fun ListaNotas(
     onAddClick: () -> Unit,
     viewModel: NotaUiViewModel = viewModel()
 ) {
-    val notas = viewModel.notas.collectAsState()
+    val notas by viewModel.notas.collectAsState()
+    var isLoading by remember { mutableStateOf(true) }
+
+    LaunchedEffect(notas) {
+        isLoading = false
+    }
 
     Scaffold(
         topBar = { TopBarNotas(onAddClick) }
     ) { innerPadding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
         ) {
-            items(notas.value, key = { it.id }) { nota ->
-                NotaCard(nota = nota)
+            when {
+                isLoading -> {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
+                }
+                notas.isEmpty() -> {
+                    Text(
+                        text = "No tienes notas registradas",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    )
+                }
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(notas, key = { it.id }) { nota ->
+                            NotaCard(nota = nota)
+                        }
+                    }
+                }
             }
         }
     }
@@ -78,38 +103,17 @@ fun NotaCard(nota: Nota) {
     val fechaFormateada = nota.fecha.format(formatter)
 
     val textFecha = buildAnnotatedString {
-        withStyle(
-            SpanStyle(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                fontWeight = FontWeight.SemiBold
-            )
-        ) { append("Fecha:") }
-        withStyle(
-            style = SpanStyle(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                fontWeight = FontWeight.Light
-            )
-        ) { append(" $fechaFormateada") }
+        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primaryContainer, fontWeight = FontWeight.SemiBold)) { append("Fecha:") }
+        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primaryContainer, fontWeight = FontWeight.Light)) { append(" $fechaFormateada") }
     }
 
     val textComentario = buildAnnotatedString {
-        withStyle(
-            SpanStyle(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                fontWeight = FontWeight.SemiBold
-            )
-        ) { append("Comentario:") }
-        withStyle(
-            style = SpanStyle(
-                color = MaterialTheme.colorScheme.primaryContainer,
-                fontWeight = FontWeight.Light
-            )
-        ) { append(" ${nota.contenido}") }
+        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primaryContainer, fontWeight = FontWeight.SemiBold)) { append("Comentario:") }
+        withStyle(SpanStyle(color = MaterialTheme.colorScheme.primaryContainer, fontWeight = FontWeight.Light)) { append(" ${nota.contenido}") }
     }
 
     Card(
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.background),
-        shape = RectangleShape,
         modifier = Modifier
             .fillMaxWidth()
             .padding(15.dp)

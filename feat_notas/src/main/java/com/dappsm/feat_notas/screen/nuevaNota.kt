@@ -1,5 +1,6 @@
 package com.dappsm.feat_notas.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -54,6 +56,7 @@ fun formNuevaNota(
     viewModel: NotaUiViewModel = viewModel()
 ) {
     var comentario by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -112,6 +115,8 @@ fun formNuevaNota(
                     if (comentario.isNotBlank()) {
                         viewModel.agregar(usuarioId = 1, contenido = comentario)
                         onBackClick()
+                    } else {
+                        Toast.makeText(context, "El comentario no puede estar vacío", Toast.LENGTH_SHORT).show()
                     }
                 },
                 modifier = Modifier

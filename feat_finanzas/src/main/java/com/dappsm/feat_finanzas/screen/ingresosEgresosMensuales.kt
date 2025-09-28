@@ -60,6 +60,11 @@ fun IngresosEgresosMes(
     var anio by remember { mutableStateOf("") }
     var mesError by remember { mutableStateOf(false) }
     var anioError by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(true) }
+
+    LaunchedEffect(movimientos) {
+        isLoading = false
+    }
 
     Scaffold(
         topBar = { topbarIEM() },
@@ -140,39 +145,57 @@ fun IngresosEgresosMes(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            LazyColumn {
-                movimientosFiltrados.groupBy { "${movimientoMes(it.mes)} ${it.fecha.year}" }.forEach { (mesAnio, listaMovimientos) ->
-                    item {
-                        Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            shape = RoundedCornerShape(15.dp),
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.primaryContainer
-                            )
-                        ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(
-                                    text = mesAnio,
-                                    fontWeight = FontWeight.Bold,
-                                    textAlign = TextAlign.Center,
-                                    color = MaterialTheme.colorScheme.background,
-                                    fontSize = 18.sp,
+            when {
+                isLoading -> {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
+                }
+                movimientosFiltrados.isEmpty() -> {
+                    Text(
+                        text = "No hay movimientos para este período",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        ),
+                        modifier = Modifier.padding(20.dp)
+                    )
+                }
+                else -> {
+                    LazyColumn {
+                        movimientosFiltrados.groupBy { "${movimientoMes(it.mes)} ${it.fecha.year}" }.forEach { (mesAnio, listaMovimientos) ->
+                            item {
+                                Card(
                                     modifier = Modifier
-                                        .align(Alignment.CenterHorizontally)
                                         .fillMaxWidth()
-                                )
-                                listaMovimientos.forEach { movimiento ->
-                                    val textMovimiento = buildAnnotatedString {
-                                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Medium)) {
-                                            append("${movimiento.tipo} de:")
-                                        }
-                                        withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light)) {
-                                            append(" ${movimiento.cantidad}")
+                                        .padding(12.dp),
+                                    shape = RoundedCornerShape(15.dp),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.primaryContainer
+                                    )
+                                ) {
+                                    Column(modifier = Modifier.padding(16.dp)) {
+                                        Text(
+                                            text = mesAnio,
+                                            fontWeight = FontWeight.Bold,
+                                            textAlign = TextAlign.Center,
+                                            color = MaterialTheme.colorScheme.background,
+                                            fontSize = 18.sp,
+                                            modifier = Modifier
+                                                .align(Alignment.CenterHorizontally)
+                                                .fillMaxWidth()
+                                        )
+                                        listaMovimientos.forEach { movimiento ->
+                                            val textMovimiento = buildAnnotatedString {
+                                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Medium)) {
+                                                    append("${movimiento.tipo} de:")
+                                                }
+                                                withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.background, fontWeight = FontWeight.Light)) {
+                                                    append(" ${movimiento.cantidad}")
+                                                }
+                                            }
+                                            Text(text = textMovimiento, fontSize = 20.sp, modifier = Modifier.padding(8.dp))
                                         }
                                     }
-                                    Text(text = textMovimiento, fontSize = 20.sp, modifier = Modifier.padding(8.dp))
                                 }
                             }
                         }

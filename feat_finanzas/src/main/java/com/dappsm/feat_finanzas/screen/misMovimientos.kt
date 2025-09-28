@@ -33,6 +33,7 @@ import com.dappsm.data_core.model.Movimiento
 import com.dappsm.feat_finanzas.R
 import com.dappsm.feat_finanzas.viewmodel.MovimientoUiViewModel
 import java.time.format.DateTimeFormatter
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,12 +46,21 @@ fun MisMovimientosCard(
     val movimientos by viewModel.movimientos.collectAsState()
     val ingresoColor by viewModel.ingresoColor.collectAsState()
     val egresoColor by viewModel.egresoColor.collectAsState()
+    var isLoading by remember { mutableStateOf(true) }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(movimientos) {
+        isLoading = false
+    }
 
     Scaffold(
         topBar = { MisMovimientosTopBar() },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onAddClick,
+                onClick = {
+                    isLoading = true
+                    onAddClick()
+                },
                 containerColor = MaterialTheme.colorScheme.tertiary,
                 elevation = FloatingActionButtonDefaults.elevation(0.dp)
             ) {
@@ -63,20 +73,50 @@ fun MisMovimientosCard(
             }
         }
     ) { innerPadding ->
-        LazyColumn(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(innerPadding),
+            contentAlignment = Alignment.Center
         ) {
-            items(movimientos, key = { it.id }) { movimiento ->
-                MovimientoCard(
-                    movimiento = movimiento,
-                    ingresoColor = ingresoColor,
-                    egresoColor = egresoColor,
-                    onDelete = { viewModel.eliminar(movimiento) },
-                    onEditClick = { onEditClick(movimiento) },
-                    onDetailsClick = { onDetailsClick(movimiento) }
-                )
+            when {
+                isLoading -> {
+                    CircularProgressIndicator(color = MaterialTheme.colorScheme.tertiary)
+                }
+                movimientos.isEmpty() -> {
+                    Text(
+                        text = "No tienes movimientos registrados",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
+                    )
+                }
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        items(movimientos, key = { it.id }) { movimiento ->
+                            MovimientoCard(
+                                movimiento = movimiento,
+                                ingresoColor = ingresoColor,
+                                egresoColor = egresoColor,
+                                onDelete = {
+                                    scope.launch {
+                                        isLoading = true
+                                        viewModel.eliminar(movimiento)
+                                    }
+                                },
+                                onEditClick = {
+                                    isLoading = true
+                                    onEditClick(movimiento)
+                                },
+                                onDetailsClick = { onDetailsClick(movimiento) }
+                            )
+                        }
+                    }
+                }
             }
         }
     }
