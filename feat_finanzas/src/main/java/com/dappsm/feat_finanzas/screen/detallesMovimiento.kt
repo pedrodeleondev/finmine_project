@@ -160,7 +160,7 @@ fun DetallesMovimiento(
                         onClick = { onEditClick() },
                         modifier = Modifier
                             .width(300.dp)
-                            .height(150.dp),
+                            .height(60.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary),
                         shape = RoundedCornerShape(10.dp)
                     ) {

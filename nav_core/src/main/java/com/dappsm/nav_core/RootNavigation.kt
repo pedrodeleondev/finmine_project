@@ -91,8 +91,25 @@ fun MainScaffold(
     configViewModel: ConfigViewModel
 ) {
     val innerNavController = rememberNavController()
+    val backStackEntry by innerNavController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
 
-    Scaffold(bottomBar = { BottomNavBar(navController = innerNavController) }) { innerPadding: PaddingValues ->
+    val hideBottomBarRoutes = listOf(
+        "${Screens.FormMovimiento.route}/{id}",
+        Screens.FormMovimiento.route,
+        "${Screens.DetalleMovimiento.route}/{id}",
+        Screens.FormNota.route
+    )
+
+    val showBottomBar = currentRoute !in hideBottomBarRoutes
+
+    Scaffold(
+        bottomBar = {
+            if (showBottomBar) {
+                BottomNavBar(navController = innerNavController)
+            }
+        }
+    ) { innerPadding: PaddingValues ->
         NavHost(
             navController = innerNavController,
             startDestination = Screens.Movimientos.route,
