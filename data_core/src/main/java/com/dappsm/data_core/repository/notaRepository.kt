@@ -10,13 +10,23 @@ import com.dappsm.data_core.dao.NotaDao
 import com.dappsm.data_core.firebase.FirebaseNotaService
 import com.dappsm.data_core.model.Nota
 import com.dappsm.data_core.work.SyncNotasWorker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 
 class NotaRepository(
     private val dao: NotaDao,
     private val firebaseService: FirebaseNotaService
 ) {
-    fun getNotasByEmail(email: String): Flow<List<Nota>> = dao.getNotasByEmail(email)
+    fun getNotasByEmail(email: String): Flow<List<Nota>> {
+        CoroutineScope(Dispatchers.IO).launch {
+            firebaseService.getNotasByEmail(email).collect { remotas ->
+                dao.insertAll(remotas)
+            }
+        }
+        return dao.getNotasByEmail(email)
+    }
 
     suspend fun getNotaById(id: String): Nota? = dao.getNotaById(id)
 
@@ -45,12 +55,16 @@ class NotaRepository(
     }
 
     suspend fun getPending(): List<Nota> = dao.getPending()
-
     suspend fun clearPending(id: String) = dao.clearPending(id)
 
     private fun enqueueOneTime(context: Context) {
-        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).setRequiresBatteryNotLow(true).build()
-        val req: WorkRequest = OneTimeWorkRequestBuilder<SyncNotasWorker>().setConstraints(constraints).build()
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+        val req: WorkRequest = OneTimeWorkRequestBuilder<SyncNotasWorker>()
+            .setConstraints(constraints)
+            .build()
         WorkManager.getInstance(context).enqueue(req)
     }
 }

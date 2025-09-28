@@ -20,6 +20,9 @@ interface NotaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNota(n: Nota)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(notas: List<Nota>)
+
     @Update
     suspend fun updateNota(n: Nota)
 
