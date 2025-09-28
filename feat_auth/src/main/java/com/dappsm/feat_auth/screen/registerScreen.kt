@@ -34,14 +34,13 @@ fun RegisterScreen(
 
     val authState = authViewModel.authState.observeAsState()
     LaunchedEffect(authState.value) {
-        when (authState.value) {
+        when (val state = authState.value) {
             is AuthState.Authenticated -> {
                 navController.navigate("main")
             }
-            is AuthState.Error -> Toast.makeText(
-                context,
-                (authState.value as AuthState.Error).message, Toast.LENGTH_SHORT
-            ).show()
+            is AuthState.Error -> {
+                Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_SHORT).show()
+            }
             else -> Unit
         }
     }
@@ -170,7 +169,13 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { authViewModel.signup(email, password) },
+                onClick = {
+                    if (email.isBlank() || password.isBlank()) {
+                        Toast.makeText(context, "Correo y contraseña requeridos", Toast.LENGTH_SHORT).show()
+                    } else {
+                        authViewModel.signup(email, password)
+                    }
+                },
                 modifier = Modifier.width(230.dp),
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(

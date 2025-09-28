@@ -56,19 +56,17 @@ fun LoginScreen(
         .build()
 
     LaunchedEffect(authState.value) {
-        when (authState.value) {
+        when (val state = authState.value) {
             is AuthState.Authenticated -> {
                 navController.navigate("main")
             }
-            is AuthState.Error -> Toast.makeText(
-                context,
-                (authState.value as AuthState.Error).message,
-                Toast.LENGTH_SHORT
-            ).show()
-
+            is AuthState.Error -> {
+                Toast.makeText(context, "Error: ${state.message}", Toast.LENGTH_SHORT).show()
+            }
             else -> Unit
         }
     }
+
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -118,8 +116,16 @@ fun LoginScreen(
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
-                placeholder = { Text("ej. prueba@gmail.com", fontFamily = Poppins, color = MaterialTheme.colorScheme.onBackground) },
-                modifier = Modifier.fillMaxWidth().height(55.dp),
+                placeholder = {
+                    Text(
+                        "ej. prueba@gmail.com",
+                        fontFamily = Poppins,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -137,8 +143,16 @@ fun LoginScreen(
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
-                placeholder = { Text("ej. FhdW32*M", fontFamily = Poppins, color = MaterialTheme.colorScheme.onBackground) },
-                modifier = Modifier.fillMaxWidth().height(55.dp)
+                placeholder = {
+                    Text(
+                        "ej. FhdW32*M",
+                        fontFamily = Poppins,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp)
             )
 
             Spacer(modifier = Modifier.height(60.dp))
@@ -170,7 +184,11 @@ fun LoginScreen(
 
             Button(
                 onClick = {
-                    authViewModel.login(email, password)
+                    if (email.isBlank() || password.isBlank()) {
+                        Toast.makeText(context, "Correo y contraseña requeridos", Toast.LENGTH_SHORT).show()
+                    } else {
+                        authViewModel.login(email, password)
+                    }
                 },
                 enabled = authState.value != AuthState.Loading,
                 shape = RoundedCornerShape(10.dp),
@@ -179,7 +197,11 @@ fun LoginScreen(
                     containerColor = MaterialTheme.colorScheme.primary
                 )
             ) {
-                Text(text = "Iniciar Sesión", fontFamily = Poppins, color = MaterialTheme.colorScheme.onPrimary)
+                Text(
+                    text = "Iniciar Sesión",
+                    fontFamily = Poppins,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -204,14 +226,14 @@ fun LoginScreen(
                                 } else {
                                     Toast.makeText(
                                         context,
-                                        "No se obtuvo idToken",
+                                        "No se pudo obtener el idToken de Google",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 }
                             } catch (e: Exception) {
                                 Toast.makeText(
                                     context,
-                                    "Credencial inválida: ${e.message}",
+                                    "Credencial inválida: ${e.message ?: "desconocido"}",
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
@@ -219,7 +241,7 @@ fun LoginScreen(
                         } catch (e: GetCredentialException) {
                             Toast.makeText(
                                 context,
-                                "Error Google sign-in: ${e.message}",
+                                "Error en Google Sign-In: ${e.errorMessage ?: e.message ?: "desconocido"}",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

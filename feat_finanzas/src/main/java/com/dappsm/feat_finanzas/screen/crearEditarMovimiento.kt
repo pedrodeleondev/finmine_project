@@ -1,24 +1,26 @@
 package com.dappsm.feat_finanzas.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.dappsm.feat_finanzas.R
-import com.dappsm.feat_finanzas.viewmodel.MovimientoUiViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.dappsm.data_core.model.Movimiento
+import com.dappsm.feat_finanzas.R
+import com.dappsm.feat_finanzas.viewmodel.MovimientoUiViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,6 +67,7 @@ fun formMovimiento(
     onBackClick: () -> Unit,
     viewModel: MovimientoUiViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     var tipo by remember { mutableStateOf("") }
     var monto by remember { mutableStateOf("") }
     var metodopago by remember { mutableStateOf("") }
@@ -91,6 +94,15 @@ fun formMovimiento(
             ) {
                 Button(
                     onClick = {
+                        val tipoValido = tipo.lowercase() == "ingreso" || tipo.lowercase() == "egreso"
+                        if (tipo.isBlank() || monto.isBlank() || metodopago.isBlank() || motivo.isBlank()) {
+                            Toast.makeText(context, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
+                        if (!tipoValido) {
+                            Toast.makeText(context, "El tipo debe ser 'ingreso' o 'egreso'", Toast.LENGTH_SHORT).show()
+                            return@Button
+                        }
                         if (esEdicion) {
                             viewModel.actualizar(
                                 movimientoExistente!!,

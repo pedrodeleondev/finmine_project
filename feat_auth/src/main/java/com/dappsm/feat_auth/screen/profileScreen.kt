@@ -59,7 +59,7 @@ fun ProfileScreen(
                 fontSize = 29.sp,
                 fontFamily = Poppins,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground, // ✅ siempre visible
+                color = MaterialTheme.colorScheme.onBackground,
                 modifier = Modifier.padding(top = 20.dp, start = 15.dp)
             )
         }
@@ -73,7 +73,7 @@ fun ProfileScreen(
             Text(
                 text = email,
                 fontSize = 25.sp,
-                color = MaterialTheme.colorScheme.onBackground // ✅ siempre visible
+                color = MaterialTheme.colorScheme.onBackground
             )
         }
 
